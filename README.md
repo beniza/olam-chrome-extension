@@ -40,7 +40,8 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 ### For End Users (Recommended)
 
 1. **Download the Extension**
-   - Download the latest release ZIP file
+   - Go to the [Releases page](https://github.com/beniza/olam-chrome-extension/releases)
+   - Download the latest `olam-dictionary-extension-v1.1.0.zip` file
    - Extract all files to a folder (e.g., `olam-dictionary-extension`)
 
 2. **Load in Chrome**
@@ -61,17 +62,14 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd chrome-plugin
-
-# Checkout the latest version
-git checkout refactor/code-standardization
+git clone https://github.com/beniza/olam-chrome-extension.git
+cd olam-chrome-extension
 
 # Load in Chrome
 # 1. Go to chrome://extensions/
 # 2. Enable Developer mode
 # 3. Click "Load unpacked"
-# 4. Select the chrome-plugin directory
+# 4. Select the olam-chrome-extension directory
 ```
 
 ---
@@ -255,8 +253,8 @@ Comprehensive testing checklist available for quality assurance:
 ### Setup Development Environment
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd chrome-plugin
+git clone https://github.com/beniza/olam-chrome-extension.git
+cd olam-chrome-extension
 
 # Install dependencies (if applicable)
 npm install
@@ -272,7 +270,7 @@ npm install
 - Consistent naming conventions
 
 ### Making Changes
-1. Create a feature branch from `refactor/code-standardization`
+1. Create a feature branch from `main`
 2. Make your changes following the modular structure
 3. Test thoroughly using [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
 4. Document changes in commit messages
