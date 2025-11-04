@@ -710,7 +710,7 @@ const EventHandlers = {
       let word = window.getSelection().toString().trim();
       
       // If no selection (common with Malayalam text), try to extract word manually
-      if (!word && e.target.nodeType === Node.TEXT_NODE || e.target.firstChild?.nodeType === Node.TEXT_NODE) {
+      if (!word && (e.target.nodeType === Node.TEXT_NODE || e.target.firstChild?.nodeType === Node.TEXT_NODE)) {
         word = this.extractWordAtPoint(e.target, e);
       }
       
