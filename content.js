@@ -271,6 +271,74 @@ const UI = {
     popup.querySelector('#olam-settings-btn').addEventListener('click', () => {
       chrome.runtime.sendMessage({ action: 'openOptions' });
     });
+    
+    // Make popup draggable by title
+    this.makeDraggable(popup);
+  },
+  
+  /**
+   * Make popup draggable by clicking and dragging the title area
+   * @param {HTMLElement} popup - Popup element
+   */
+  makeDraggable(popup) {
+    const title = popup.querySelector('.olam-popup-title');
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+    
+    title.style.cursor = 'move';
+    
+    const dragStart = (e) => {
+      if (e.type === 'mousedown') {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        
+        if (e.target === title || title.contains(e.target)) {
+          isDragging = true;
+        }
+      }
+    };
+    
+    const dragEnd = (e) => {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    };
+    
+    const drag = (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        
+        xOffset = currentX;
+        yOffset = currentY;
+        
+        // Get current position
+        const rect = popup.getBoundingClientRect();
+        const newLeft = rect.left + currentX;
+        const newTop = rect.top + currentY;
+        
+        // Set new position
+        popup.style.left = newLeft + 'px';
+        popup.style.top = newTop + 'px';
+        
+        // Reset offsets for next drag
+        xOffset = 0;
+        yOffset = 0;
+        initialX = e.clientX;
+        initialY = e.clientY;
+      }
+    };
+    
+    title.addEventListener('mousedown', dragStart);
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('mousemove', drag);
   },
   
   /**
