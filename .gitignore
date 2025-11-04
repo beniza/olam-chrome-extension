@@ -18,3 +18,5 @@ Thumbs.db
 
 # Local files
 .local/
+# Build output
+release/
