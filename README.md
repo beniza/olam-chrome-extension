@@ -269,12 +269,36 @@ npm install
 - Comprehensive JSDoc documentation
 - Consistent naming conventions
 
+### Automated Testing
+
+The project includes comprehensive unit tests using Jest. See [TESTING.md](TESTING.md) for detailed testing documentation.
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+**Test Coverage:**
+- AppState module (state management)
+- API module (language detection, search)
+- OlamAPI service (dictionary API, caching)
+- SettingsService (user preferences)
+- Chrome Extension API mocks
+
 ### Making Changes
 1. Create a feature branch from `main`
 2. Make your changes following the modular structure
-3. Test thoroughly using [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
-4. Document changes in commit messages
-5. Submit pull request
+3. Write or update tests for your changes
+4. Run `npm test` to ensure all tests pass
+5. Test manually using [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+6. Document changes in commit messages
+7. Submit pull request
 
 ---
 
