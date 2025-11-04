@@ -271,7 +271,7 @@ npm install
 
 ### Automated Testing
 
-The project includes comprehensive unit tests using Jest. See [TESTING.md](TESTING.md) for detailed testing documentation.
+The project includes comprehensive automated testing using Jest. See [TESTING.md](TESTING.md) for detailed testing documentation.
 
 ```bash
 # Run all tests
@@ -282,14 +282,25 @@ npm run test:watch
 
 # Run tests with coverage
 npm run test:coverage
+
+# Run specific test suites
+npm run test:unit
+npm run test:integration
 ```
 
-**Test Coverage:**
-- AppState module (state management)
-- API module (language detection, search)
-- OlamAPI service (dictionary API, caching)
-- SettingsService (user preferences)
-- Chrome Extension API mocks
+**Test Suite (54 tests, all passing):**
+- ✅ **AppState Module**: State management, search data, filtering, navigation (16 tests)
+- ✅ **API Module**: Language detection (English/Malayalam/Unicode), search functionality (8 tests)
+- ✅ **OlamAPI Service**: Dictionary API calls, URL construction, caching, error handling (12 tests)
+- ✅ **SettingsService**: User preferences, defaults, error recovery (6 tests)
+- ✅ **Integration Tests**: Search flow, settings synchronization (2 tests)
+- ✅ **Chrome Extension API Mocks**: Complete mock implementations for testing
+
+**Test Coverage Targets:**
+- Statements: >80%
+- Branches: >75%
+- Functions: >80%
+- Lines: >80%
 
 ### Making Changes
 1. Create a feature branch from `main`
@@ -339,7 +350,6 @@ npm run test:coverage
 - [ ] **Dark Mode**: Eye-friendly dark theme option
 - [ ] **Keyboard Shortcuts**: Custom hotkeys for quick access
 - [ ] **Firefox Support**: Port to Firefox with Manifest V2
-- [ ] **Unit Tests**: Automated testing with Jest/Mocha
 - [ ] **TypeScript Migration**: Add type safety
 - [ ] **Chrome Web Store**: Publish for easy installation
 

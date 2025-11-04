@@ -6,7 +6,7 @@
 /**
  * Mock chrome.storage.sync
  */
-export const mockChromeStorageSync = {
+const mockChromeStorageSync = {
   get: jest.fn((keys, callback) => {
     const mockData = {
       doubleClickEnabled: true,
@@ -39,7 +39,7 @@ export const mockChromeStorageSync = {
 /**
  * Mock chrome.storage.local
  */
-export const mockChromeStorageLocal = {
+const mockChromeStorageLocal = {
   get: jest.fn((keys, callback) => {
     const mockData = {};
     if (callback) {
@@ -66,7 +66,7 @@ export const mockChromeStorageLocal = {
 /**
  * Mock chrome.runtime
  */
-export const mockChromeRuntime = {
+const mockChromeRuntime = {
   sendMessage: jest.fn((message, callback) => {
     const mockResponse = {
       success: true,
@@ -90,7 +90,7 @@ export const mockChromeRuntime = {
 /**
  * Mock chrome.contextMenus
  */
-export const mockChromeContextMenus = {
+const mockChromeContextMenus = {
   create: jest.fn((properties, callback) => {
     if (callback) {
       callback();
@@ -114,7 +114,7 @@ export const mockChromeContextMenus = {
 /**
  * Mock chrome.tabs
  */
-export const mockChromeTabs = {
+const mockChromeTabs = {
   query: jest.fn((queryInfo, callback) => {
     const mockTabs = [{
       id: 1,
@@ -138,7 +138,7 @@ export const mockChromeTabs = {
 /**
  * Setup complete Chrome mock
  */
-export function setupChromeMock() {
+function setupChromeMock() {
   global.chrome = {
     storage: {
       sync: mockChromeStorageSync,
@@ -153,7 +153,7 @@ export function setupChromeMock() {
 /**
  * Create mock Olam API response
  */
-export function createMockOlamResponse(word = 'test') {
+function createMockOlamResponse(word = 'test') {
   return [
     {
       content: [word],
@@ -172,7 +172,7 @@ export function createMockOlamResponse(word = 'test') {
 /**
  * Create mock DOM element
  */
-export function createMockPopup() {
+function createMockPopup() {
   const popup = document.createElement('div');
   popup.id = 'olam-dictionary-popup';
   popup.className = 'olam-popup';
@@ -191,7 +191,7 @@ export function createMockPopup() {
 /**
  * Wait for condition to be true
  */
-export function waitFor(condition, timeout = 1000) {
+function waitFor(condition, timeout = 1000) {
   return new Promise((resolve, reject) => {
     const startTime = Date.now();
     
@@ -208,3 +208,16 @@ export function waitFor(condition, timeout = 1000) {
     checkCondition();
   });
 }
+
+// Export for CommonJS
+module.exports = {
+  mockChromeStorageSync,
+  mockChromeStorageLocal,
+  mockChromeRuntime,
+  mockChromeContextMenus,
+  mockChromeTabs,
+  setupChromeMock,
+  createMockOlamResponse,
+  createMockPopup,
+  waitFor
+};

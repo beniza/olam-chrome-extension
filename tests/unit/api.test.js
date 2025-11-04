@@ -3,7 +3,7 @@
  * Tests language detection and search functionality
  */
 
-import { setupChromeMock } from '../mocks/chrome-api';
+const { setupChromeMock } = require('../mocks/chrome-api');
 
 describe('API Module', () => {
   let API;

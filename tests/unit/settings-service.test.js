@@ -3,7 +3,7 @@
  * Tests settings management and language preferences
  */
 
-import { setupChromeMock } from '../mocks/chrome-api';
+const { setupChromeMock } = require('../mocks/chrome-api');
 
 describe('SettingsService', () => {
   let SettingsService;

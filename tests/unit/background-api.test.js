@@ -3,7 +3,7 @@
  * Tests API communication and caching
  */
 
-import { setupChromeMock, createMockOlamResponse } from '../mocks/chrome-api';
+const { setupChromeMock, createMockOlamResponse } = require('../mocks/chrome-api');
 
 describe('OlamAPI Service', () => {
   let OlamAPI;
