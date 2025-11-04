@@ -4,6 +4,12 @@
 /* Import Meera font for Malayalam */
 @import url('https://smc.org.in/fonts/meera.css');
 
+/* Prevent popup from affecting page layout */
+html, body {
+  width: 100% !important;
+  overflow-x: visible !important;
+}
+
 /* Inline Popup */
 #olam-dictionary-popup {
   position: fixed;
@@ -16,6 +22,13 @@
   z-index: 2147483647;
   border: 1px solid #e2e8f0;
   pointer-events: auto;
+  /* Prevent affecting page layout */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Ensure it doesn't cause body shrinkage */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .olam-popup-hidden {
