@@ -14,8 +14,22 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'searchOlam') {
     lastSelectedText = info.selectionText;
-    // Open popup or create a new window with results
-    searchInOlam(info.selectionText);
+    
+    // Get user preferences or use defaults
+    chrome.storage.sync.get(['fromLanguage', 'toLanguage'], (settings) => {
+      const fromLang = settings.fromLanguage || 'english';
+      const toLang = settings.toLanguage || 'malayalam';
+      
+      // Search and then notify content script to show popup
+      searchInOlam(info.selectionText, fromLang, toLang).then((data) => {
+        // Send message to content script to display results
+        chrome.tabs.sendMessage(tab.id, {
+          action: 'showPopup',
+          word: info.selectionText,
+          data: data
+        });
+      });
+    });
   }
 });
 

@@ -54,36 +54,34 @@ function createPopup() {
   popup = document.createElement('div');
   popup.id = 'olam-dictionary-popup';
   popup.className = 'olam-popup-hidden';
-  popup.innerHTML = `
-    <div class="olam-popup-header">
-      <div class="olam-popup-title">
-        <img src="${chrome.runtime.getURL('icons/icon48.png')}" alt="Olam" class="olam-icon">
-        <span>Olam Dictionary</span>
-      </div>
-      
-      <div class="olam-popup-nav" id="olam-nav" style="display: none;">
-        <button class="olam-nav-btn" id="olam-prev-btn" title="Previous entry">‹</button>
-        <span class="olam-nav-info" id="olam-nav-info">1/1</span>
-        <button class="olam-nav-btn" id="olam-next-btn" title="Next entry">›</button>
-      </div>
-      
-      <button class="olam-popup-settings" id="olam-settings-btn" title="Settings">⚙</button>
-      <button class="olam-popup-close" id="olam-close-btn" title="Close">×</button>
-    </div>
-    
-    <div class="olam-popup-content">
-      <div class="olam-loading">
-        <div class="olam-spinner"></div>
-        <p>Searching...</p>
-      </div>
-      
-      <div class="olam-results" id="olam-results"></div>
-      
-      <div class="olam-no-results" id="olam-no-results" style="display: none;">
-        <p>No results found</p>
-      </div>
-    </div>
-  `;
+  popup.innerHTML = `<div class="olam-popup-header">
+  <div class="olam-popup-title">
+    <img src="${chrome.runtime.getURL('icons/icon48.png')}" alt="Olam" class="olam-icon">
+    <span>Olam Dictionary</span>
+  </div>
+  
+  <div class="olam-popup-nav" id="olam-nav" style="display: none;">
+    <button class="olam-nav-btn" id="olam-prev-btn" title="Previous entry">‹</button>
+    <span class="olam-nav-info" id="olam-nav-info">1/1</span>
+    <button class="olam-nav-btn" id="olam-next-btn" title="Next entry">›</button>
+  </div>
+  
+  <button class="olam-popup-settings" id="olam-settings-btn" title="Settings">⚙</button>
+  <button class="olam-popup-close" id="olam-close-btn" title="Close">×</button>
+</div>
+
+<div class="olam-popup-content">
+  <div class="olam-loading">
+    <div class="olam-spinner"></div>
+    <p>Searching...</p>
+  </div>
+  
+  <div class="olam-results" id="olam-results"></div>
+  
+  <div class="olam-no-results" id="olam-no-results" style="display: none;">
+    <p>No results found</p>
+  </div>
+</div>`;
   
   document.body.appendChild(popup);
   
@@ -505,4 +503,55 @@ document.addEventListener('click', function(e) {
   if (popup && !popup.contains(e.target) && popup.classList.contains('olam-popup-visible')) {
     hidePopup();
   }
+});
+
+/**
+ * Listen for messages from background script (e.g., context menu searches)
+ */
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'showPopup') {
+    // Create popup if it doesn't exist
+    if (!popup) {
+      createPopup();
+    }
+    
+    // Get the position of the selected text
+    const selection = window.getSelection();
+    let x = window.innerWidth / 2;
+    let y = 100; // Default to top of viewport with some spacing
+    
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      
+      if (rect) {
+        // Position popup below the selected text
+        x = rect.left + (rect.width / 2);
+        y = rect.bottom + 5;
+      }
+    }
+    
+    // Position and show popup first
+    showPopup(x, y);
+    
+    // Get UI elements
+    const loadingEl = popup.querySelector('.olam-loading');
+    const resultsEl = popup.querySelector('#olam-results');
+    const noResultsEl = popup.querySelector('#olam-no-results');
+    
+    // Hide loading indicator
+    loadingEl.style.display = 'none';
+    
+    // Display the results from the context menu search
+    if (request.data && request.data.data && request.data.data.entries && request.data.data.entries.length > 0) {
+      displayResults(request.data, request.word);
+    } else {
+      // Show no results message
+      resultsEl.innerHTML = '';
+      noResultsEl.style.display = 'block';
+    }
+    
+    sendResponse({ success: true });
+  }
+  return true;
 });
