@@ -124,6 +124,60 @@
       line-height: 1.4;
     }
     
+    .select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    
+    select {
+      width: 100%;
+      padding: 10px 36px 10px 12px;
+      font-size: 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: white;
+      color: #2d3748;
+      cursor: pointer;
+      appearance: none;
+      transition: border-color 0.2s;
+    }
+    
+    select:hover {
+      border-color: #cbd5e0;
+    }
+    
+    select:focus {
+      outline: none;
+      border-color: #4299e1;
+    }
+    
+    .select-wrapper::after {
+      content: '▼';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #718096;
+      font-size: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #2d3748;
+    }
+    
     .status {
       padding: 12px 20px;
       background: #c6f6d5;
@@ -164,6 +218,35 @@
           </div>
         </div>
       </label>
+    </div>
+    
+    <div class="setting-group">
+      <div class="setting-info">
+        <div class="setting-title" style="margin-bottom: 15px;">Language Preferences</div>
+        <div class="setting-description" style="margin-bottom: 15px;">
+          Set default languages for context menu searches. Note: Double-click searches automatically detect the language.
+        </div>
+        
+        <div class="form-group">
+          <label for="fromLanguage">Search from:</label>
+          <div class="select-wrapper">
+            <select id="fromLanguage">
+              <option value="english">English</option>
+              <option value="malayalam">Malayalam</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="toLanguage">Translate to:</label>
+          <div class="select-wrapper">
+            <select id="toLanguage">
+              <option value="malayalam">Malayalam</option>
+              <option value="english">English</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div id="status" class="status">Settings saved!</div>
