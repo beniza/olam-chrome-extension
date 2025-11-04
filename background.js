@@ -12,8 +12,22 @@
 
 const API_BASE_URL = 'https://olam.in/api/dictionary';
 const CONTEXT_MENU_ID = 'searchOlam';
-const DEFAULT_FROM_LANG = 'english';
+const DEFAULT_FROM_LANG = 'auto';
 const DEFAULT_TO_LANG = 'malayalam';
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/**
+ * Detect language from text
+ * @param {string} text - Text to analyze
+ * @returns {string} Detected language code
+ */
+function detectLanguage(text) {
+  // Malayalam characters are in range U+0D00 to U+0D7F
+  return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
+}
 
 // =============================================================================
 // API SERVICE
@@ -147,7 +161,12 @@ const ContextMenuService = {
     
     try {
       // Get language preferences
-      const { fromLang, toLang } = await SettingsService.getLanguagePreferences();
+      let { fromLang, toLang } = await SettingsService.getLanguagePreferences();
+      
+      // Auto-detect language if set to 'auto'
+      if (fromLang === 'auto') {
+        fromLang = detectLanguage(text);
+      }
       
       // Perform search
       const data = await OlamAPI.search(text, fromLang, toLang);
@@ -212,20 +231,24 @@ const MessageHandler = {
    * @param {Function} sendResponse - Response callback
    */
   async handleSearch(request, sendResponse) {
-    const { text, fromLang, toLang } = request;
+    let { text, fromLang, toLang } = request;
     
     if (!text) {
       sendResponse({ success: false, error: 'No text provided' });
       return;
     }
     
+    // Use defaults if not provided
+    fromLang = fromLang || DEFAULT_FROM_LANG;
+    toLang = toLang || DEFAULT_TO_LANG;
+    
+    // Auto-detect language if set to 'auto'
+    if (fromLang === 'auto') {
+      fromLang = detectLanguage(text);
+    }
+    
     try {
-      const data = await OlamAPI.search(
-        text,
-        fromLang || DEFAULT_FROM_LANG,
-        toLang || DEFAULT_TO_LANG
-      );
-      
+      const data = await OlamAPI.search(text, fromLang, toLang);
       sendResponse({ success: true, data: data });
     } catch (error) {
       sendResponse({ success: false, error: error.message });

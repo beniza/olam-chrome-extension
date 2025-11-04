@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Default to true if not set
     doubleClickCheckbox.checked = result.doubleClickEnabled !== false;
     
-    // Set language preferences (defaults: english -> malayalam)
-    fromLanguageSelect.value = result.fromLanguage || 'english';
+    // Set language preferences (defaults: auto -> malayalam)
+    fromLanguageSelect.value = result.fromLanguage || 'auto';
     toLanguageSelect.value = result.toLanguage || 'malayalam';
   });
   
