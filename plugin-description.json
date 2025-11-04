@@ -1,7 +1,8 @@
 {
   "extensionName": "Olam Dictionary Chrome Extension",
-  "version": "1.0.0",
-  "description": "A Chrome extension that provides instant English-Malayalam dictionary lookup on any webpage using the Olam dictionary API. Features inline popup display, source filtering, and multi-entry navigation.",
+  "version": "1.0.1",
+  "description": "A Chrome extension that provides instant English-Malayalam dictionary lookup on any webpage using the Olam dictionary API. Features inline popup display, source filtering, and multi-entry navigation. Fixed layout interference issues with webpage content.",
+  "lastUpdated": "2025-11-04",
   
   "features": {
     "primary": [
@@ -426,9 +427,20 @@
     ],
     "performance": {
       "popupCreation": "Lazy - only created on first use",
-      "domImpact": "Minimal - single fixed-position element",
+      "domImpact": "Minimal - single fixed-position element with layout isolation",
       "apiCalls": "On-demand - only when user triggers search",
       "caching": "Last search cached in Chrome storage"
+    },
+    "layoutProtection": {
+      "implementation": "CSS-based isolation to prevent page content interference",
+      "techniques": [
+        "Transform-based stacking context creation",
+        "Hardware acceleration via translateZ",
+        "Defensive width constraints on html/body",
+        "Box-sizing and margin/padding resets"
+      ],
+      "issue": "Fixed: Popup was causing page content to shrink to the left on some websites",
+      "solution": "Added CSS isolation properties to prevent popup from affecting document flow"
     },
     "codeOrganization": {
       "contentScript": {
@@ -447,7 +459,7 @@
   },
   
   "currentPopupScreenshot": {
-    "description": "The attached screenshot shows the inline popup in action",
+    "description": "The inline popup appears without affecting page layout",
     "observations": [
       "White rounded popup floating above webpage content",
       "Blue header with 'Olam Dictionary' title and close button",
@@ -459,7 +471,8 @@
       "'View full details →' link at bottom",
       "Clean shadow effect creating depth",
       "Positioned near selected text without obscuring content",
-      "Page layout unaffected - popup uses position:fixed"
+      "Page layout unaffected - popup uses position:fixed with layout isolation",
+      "No content shrinkage or displacement on host pages"
     ],
     "activeFeatures": [
       "Multi-entry navigation (showing 1 of 3)",
@@ -468,6 +481,18 @@
       "Direct link to full entry"
     ]
   },
+  
+  "recentIssuesFixed": [
+    {
+      "issue": "Page Layout Shrinkage",
+      "date": "2025-11-04",
+      "description": "Fixed issue where popup caused page content to shrink to the left side, leaving large whitespace on the right",
+      "rootCause": "Fixed-position popup element was interfering with page layout calculations",
+      "solution": "Added CSS isolation techniques including transform-based stacking context, hardware acceleration, and defensive width constraints",
+      "filesModified": ["styles.css"],
+      "testing": "Verified on Manorama Online article pages and other Malayalam content sites"
+    }
+  ],
   
   "futureEnhancements": {
     "notImplemented": [
