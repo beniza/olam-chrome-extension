@@ -1,0 +1,483 @@
+{
+  "extensionName": "Olam Dictionary Chrome Extension",
+  "version": "1.0.0",
+  "description": "A Chrome extension that provides instant English-Malayalam dictionary lookup on any webpage using the Olam dictionary API. Features inline popup display, source filtering, and multi-entry navigation.",
+  
+  "features": {
+    "primary": [
+      "Double-click any word on any webpage to get instant dictionary lookup",
+      "Inline floating popup appears near cursor position",
+      "Auto-detects language (English or Malayalam) based on Unicode range",
+      "Navigate between multiple dictionary entries",
+      "Filter results by source reliability (E.K. Kurup vs Crowd Sourced)",
+      "Beautiful Malayalam text rendering using Meera font"
+    ],
+    "secondary": [
+      "Context menu integration (right-click selected text)",
+      "Configurable settings page (can disable double-click)",
+      "Keyboard shortcuts (Escape to close)",
+      "Smart positioning (adjusts if popup goes off-screen)",
+      "Click outside to close"
+    ]
+  },
+  
+  "architecture": {
+    "manifestVersion": 3,
+    "components": {
+      "contentScript": {
+        "file": "content.js",
+        "runsOn": "all webpages",
+        "responsibilities": [
+          "Listen for user interactions (double-click, escape key, clicks)",
+          "Create and manage inline popup DOM element",
+          "Handle popup positioning with viewport bounds detection",
+          "Display dictionary results with formatting",
+          "Manage navigation between multiple entries",
+          "Handle source filtering (E.K. Kurup, Crowd Sourced)",
+          "Load and respect user settings from Chrome storage"
+        ],
+        "eventListeners": [
+          "dblclick - Primary trigger for dictionary lookup",
+          "keydown (Escape) - Close popup",
+          "click (outside popup) - Close popup",
+          "click (close button) - Close popup",
+          "click (tag filters) - Filter by source",
+          "click (prev/next buttons) - Navigate entries"
+        ],
+        "globalState": [
+          "popup - Reference to popup DOM element",
+          "doubleClickEnabled - User setting",
+          "currentData - Full API response",
+          "currentEntryIndex - Active entry being displayed",
+          "currentFilterTag - Active source filter (null = all)",
+          "currentSearchWord - The searched word",
+          "currentFromLang - Source language",
+          "currentToLang - Target language"
+        ]
+      },
+      "backgroundScript": {
+        "file": "background.js",
+        "type": "service worker",
+        "responsibilities": [
+          "Make API calls to olam.in (avoids CORS in content scripts)",
+          "Create context menu for right-click search",
+          "Store last search in Chrome storage",
+          "Handle messages from content script"
+        ],
+        "messageHandlers": {
+          "searchWord": "Fetches dictionary data from API and returns to content script",
+          "getLastSearch": "Retrieves stored search from Chrome storage"
+        }
+      },
+      "optionsPage": {
+        "files": ["options.html", "options.js"],
+        "settings": {
+          "doubleClickEnabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable/disable double-click word lookup",
+            "storage": "chrome.storage.sync"
+          }
+        }
+      },
+      "styles": {
+        "file": "styles.css",
+        "includes": [
+          "Inline popup styles (for content script)",
+          "Extension popup styles (for toolbar icon)",
+          "Settings page styles",
+          "Meera font import for Malayalam text"
+        ]
+      }
+    }
+  },
+  
+  "api": {
+    "provider": "Olam.in",
+    "endpoint": "https://olam.in/api/dictionary/{from_lang}/{to_lang}/{word}",
+    "languages": {
+      "supported": [
+        "english -> malayalam",
+        "malayalam -> malayalam"
+      ],
+      "detection": {
+        "malayalam": "Unicode range U+0D00 to U+0D7F",
+        "english": "Default for non-Malayalam text"
+      }
+    },
+    "responseStructure": {
+      "data": {
+        "entries": [
+          {
+            "guid": "Unique entry identifier",
+            "content": ["Array of words/phrases"],
+            "tags": ["Source tags like 'src:ekkurup', 'src:crowd'"],
+            "relations": [
+              {
+                "content": ["Array of translations/meanings"],
+                "relation": {
+                  "types": ["Word types: noun, verb, etc."]
+                }
+              }
+            ]
+          }
+        ],
+        "query": {
+          "q": "Original search term",
+          "from_lang": "Source language",
+          "to_lang": "Target language"
+        }
+      }
+    }
+  },
+  
+  "workflow": {
+    "userInteraction": {
+      "trigger": "User double-clicks a word on any webpage",
+      "steps": [
+        "1. Browser automatically selects the word on double-click",
+        "2. dblclick event listener in content.js captures the event",
+        "3. Check if doubleClickEnabled setting is true",
+        "4. Get selected text using window.getSelection()",
+        "5. Detect language using Unicode range regex",
+        "6. Call searchInOlam(word, cursorX, cursorY)"
+      ]
+    },
+    "apiCall": {
+      "steps": [
+        "1. content.js sends chrome.runtime.sendMessage to background.js",
+        "2. Message includes: action='searchWord', text, fromLang, toLang",
+        "3. background.js receives message and makes fetch() to olam.in API",
+        "4. API returns JSON with dictionary entries",
+        "5. background.js stores result in chrome.storage.local (lastSearch)",
+        "6. background.js sends response back to content.js",
+        "7. content.js receives data and calls displayResults()"
+      ]
+    },
+    "displayFlow": {
+      "steps": [
+        "1. displayResults() stores data in global variables",
+        "2. Shows navigation controls if multiple entries exist",
+        "3. Calls renderCurrentEntry() to display first entry",
+        "4. renderCurrentEntry() creates DOM elements:",
+        "   - Word header with searched term",
+        "   - Source filter tags (E.K. Kurup, Crowd Sourced, All Sources)",
+        "   - First 3 words of translation",
+        "   - Word type (noun, verb, etc.)",
+        "   - Link to full details on olam.in",
+        "5. User can navigate with prev/next buttons",
+        "6. User can filter by clicking source tags"
+      ]
+    },
+    "positioning": {
+      "strategy": "Smart viewport-relative positioning",
+      "steps": [
+        "1. Get cursor coordinates (clientX, clientY)",
+        "2. Calculate default position: cursor + 10px offset",
+        "3. Get popup dimensions and viewport size",
+        "4. If popup would go off right edge: move left",
+        "5. If popup would go off bottom: show above cursor",
+        "6. Apply position:fixed with calculated left/top values"
+      ]
+    }
+  },
+  
+  "popupUI": {
+    "description": "Floating inline dictionary popup with clean, modern design matching olam.in aesthetic",
+    "structure": {
+      "header": {
+        "elements": [
+          "Title: 'Olam Dictionary' (left)",
+          "Navigation controls: ‹ 1/3 › (center, only if multiple entries)",
+          "Close button: × (right)"
+        ],
+        "styling": {
+          "background": "#4299e1 (blue)",
+          "color": "white",
+          "padding": "12px 16px",
+          "borderRadius": "12px 12px 0 0"
+        }
+      },
+      "content": {
+        "sections": [
+          {
+            "name": "Word header",
+            "display": "Searched word in large bold text",
+            "styling": {
+              "fontSize": "20px",
+              "fontWeight": "600",
+              "color": "#2c5282"
+            }
+          },
+          {
+            "name": "Source filter tags",
+            "display": "Clickable buttons to filter by data source",
+            "tags": [
+              {
+                "label": "All Sources",
+                "style": "default gray",
+                "active": "blue highlight"
+              },
+              {
+                "label": "E. K. Kurup",
+                "tag": "src:ekkurup",
+                "style": "green background (#48bb78)",
+                "reliability": "highest",
+                "description": "Most reliable source - authoritative dictionary"
+              },
+              {
+                "label": "Crowd Sourced",
+                "tag": "src:crowd",
+                "style": "orange background (#fc8181)",
+                "reliability": "community",
+                "description": "Community-contributed translations"
+              }
+            ]
+          },
+          {
+            "name": "Translation/Meaning",
+            "display": "First 3 words of translation with '...' if more",
+            "styling": {
+              "fontSize": "16px",
+              "fontFamily": "Meera (Malayalam font)",
+              "color": "#2c5282",
+              "lineHeight": "1.5"
+            }
+          },
+          {
+            "name": "Word type",
+            "display": "Grammar classification (noun, verb, etc.)",
+            "styling": {
+              "fontSize": "11px",
+              "background": "#edf2f7",
+              "padding": "3px 8px",
+              "borderRadius": "4px",
+              "fontStyle": "italic"
+            }
+          },
+          {
+            "name": "Full details link",
+            "display": "Link to complete entry on olam.in",
+            "url": "https://olam.in/dictionary/{from_lang}/{to_lang}/{word}",
+            "styling": {
+              "color": "#4299e1",
+              "textDecoration": "none",
+              "arrow": "→"
+            }
+          }
+        ]
+      }
+    },
+    "dimensions": {
+      "width": "320px",
+      "maxWidth": "90vw (responsive)",
+      "maxHeight": "400px (content scrollable)"
+    },
+    "positioning": {
+      "type": "position: fixed",
+      "zIndex": "2147483647 (maximum - always on top)",
+      "default": "10px below and right of cursor",
+      "adjustments": [
+        "Moves left if would overflow right edge",
+        "Moves above cursor if would overflow bottom edge"
+      ]
+    },
+    "interactions": {
+      "open": "Double-click any word",
+      "close": [
+        "Click × button",
+        "Press Escape key",
+        "Click outside popup"
+      ],
+      "navigate": "Click ‹ or › buttons (if multiple entries)",
+      "filter": "Click source tag buttons"
+    }
+  },
+  
+  "theming": {
+    "fonts": {
+      "malayalam": {
+        "family": "Meera",
+        "source": "@import url('https://smc.org.in/fonts/meera.css')",
+        "usage": "All Malayalam text in translations"
+      },
+      "english": {
+        "family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "usage": "UI elements and English text"
+      }
+    },
+    "colors": {
+      "primary": {
+        "blue": "#4299e1",
+        "usage": "Header background, links, active states"
+      },
+      "text": {
+        "dark": "#2d3748",
+        "medium": "#4a5568",
+        "light": "#718096"
+      },
+      "sources": {
+        "ekkurup": {
+          "background": "#c6f6d5 (light green)",
+          "border": "#48bb78",
+          "text": "#22543d",
+          "active": "#48bb78 with white text"
+        },
+        "crowd": {
+          "background": "#fed7d7 (light orange)",
+          "border": "#fc8181",
+          "text": "#742a2a",
+          "active": "#fc8181 with white text"
+        }
+      },
+      "ui": {
+        "background": "#ffffff",
+        "border": "#e2e8f0",
+        "shadow": "0 10px 40px rgba(0, 0, 0, 0.2)"
+      }
+    },
+    "design": {
+      "style": "Clean, minimal, matching olam.in aesthetic",
+      "borderRadius": "12px (rounded corners)",
+      "shadows": "Multi-layer for depth",
+      "transitions": "0.2s ease for hover effects",
+      "spacing": "Consistent 8px-based scale"
+    }
+  },
+  
+  "dataElements": {
+    "apiResponse": {
+      "structure": "Nested JSON from olam.in API",
+      "keyPaths": {
+        "entries": "data.data.entries[]",
+        "word": "data.data.entries[].content[]",
+        "tags": "data.data.entries[].tags[]",
+        "translations": "data.data.entries[].relations[].content[]",
+        "wordTypes": "data.data.entries[].relations[].relation.types[]"
+      }
+    },
+    "displayData": {
+      "extracted": [
+        "entry.content[0] - Main word",
+        "entry.tags[] - Source tags (filtered for 'src:*')",
+        "entry.relations[0].content.slice(0,3) - First 3 translations",
+        "entry.relations[0].relation.types - Word classification"
+      ]
+    },
+    "storage": {
+      "chrome.storage.sync": {
+        "doubleClickEnabled": "User setting for feature toggle"
+      },
+      "chrome.storage.local": {
+        "lastSearch": {
+          "query": "Search term",
+          "result": "Full API response",
+          "timestamp": "Unix timestamp"
+        }
+      }
+    }
+  },
+  
+  "settings": {
+    "accessMethod": "Right-click extension icon → Options",
+    "available": [
+      {
+        "name": "Double-click opens dictionary",
+        "key": "doubleClickEnabled",
+        "type": "toggle",
+        "default": true,
+        "description": "Automatically show dictionary popup when you double-click a word on any webpage"
+      }
+    ],
+    "implementation": {
+      "ui": "options.html - Toggle switch with description",
+      "logic": "options.js - Saves to chrome.storage.sync",
+      "sync": "Changes trigger chrome.storage.onChanged listener in content.js",
+      "effect": "Immediately enables/disables double-click behavior"
+    }
+  },
+  
+  "permissions": {
+    "required": [
+      {
+        "name": "storage",
+        "reason": "Save user settings and last search"
+      },
+      {
+        "name": "contextMenus",
+        "reason": "Right-click menu option for selected text"
+      },
+      {
+        "name": "https://olam.in/*",
+        "type": "host_permissions",
+        "reason": "API access for dictionary lookups"
+      }
+    ]
+  },
+  
+  "technicalDetails": {
+    "manifestVersion": 3,
+    "contentSecurityPolicy": "Default",
+    "browserCompatibility": [
+      "Chrome",
+      "Edge",
+      "Brave",
+      "Other Chromium-based browsers"
+    ],
+    "performance": {
+      "popupCreation": "Lazy - only created on first use",
+      "domImpact": "Minimal - single fixed-position element",
+      "apiCalls": "On-demand - only when user triggers search",
+      "caching": "Last search cached in Chrome storage"
+    },
+    "codeOrganization": {
+      "contentScript": {
+        "sections": [
+          "Global state variables",
+          "Settings management",
+          "Popup DOM creation",
+          "Dictionary API search",
+          "Results display and rendering",
+          "Event listeners"
+        ],
+        "commentLevel": "Comprehensive - JSDoc style for functions",
+        "linesOfCode": "~476 lines with comments"
+      }
+    }
+  },
+  
+  "currentPopupScreenshot": {
+    "description": "The attached screenshot shows the inline popup in action",
+    "observations": [
+      "White rounded popup floating above webpage content",
+      "Blue header with 'Olam Dictionary' title and close button",
+      "Navigation controls visible (‹ 1/3 ›) indicating multiple entries",
+      "Source filter tags displayed: 'All Sources', 'E. K. Kurup' (green), 'Crowd Sourced' (orange)",
+      "One tag is actively highlighted showing filtering in action",
+      "Malayalam translation text rendered in Meera font",
+      "Word type label shown in gray pill",
+      "'View full details →' link at bottom",
+      "Clean shadow effect creating depth",
+      "Positioned near selected text without obscuring content",
+      "Page layout unaffected - popup uses position:fixed"
+    ],
+    "activeFeatures": [
+      "Multi-entry navigation (showing 1 of 3)",
+      "Source filtering with color-coded tags",
+      "Partial translation display (first 3 words)",
+      "Direct link to full entry"
+    ]
+  },
+  
+  "futureEnhancements": {
+    "notImplemented": [
+      "Offline mode with cached results",
+      "Search history panel",
+      "Pronunciation audio",
+      "Keyboard shortcuts for navigation",
+      "Dark mode theme",
+      "Export/save favorite words",
+      "Firefox version"
+    ]
+  }
+}

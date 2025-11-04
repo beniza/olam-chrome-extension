@@ -1,0 +1,609 @@
+/* Olam Dictionary Chrome Extension Styles */
+/* Inline popup styles for content script */
+
+/* Import Meera font for Malayalam */
+@import url('https://smc.org.in/fonts/meera.css');
+
+/* Inline Popup */
+#olam-dictionary-popup {
+  position: fixed;
+  width: 320px;
+  max-width: 90vw;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Meera', 'Noto Sans Malayalam';
+  z-index: 2147483647;
+  border: 1px solid #e2e8f0;
+  pointer-events: auto;
+}
+
+.olam-popup-hidden {
+  display: none;
+}
+
+.olam-popup-visible {
+  display: block;
+  animation: olamFadeIn 0.2s ease-out;
+}
+
+@keyframes olamFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Popup Header */
+.olam-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #4299e1;
+  color: white;
+  border-radius: 12px 12px 0 0;
+  gap: 10px;
+}
+
+.olam-popup-title {
+  font-weight: 600;
+  font-size: 14px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.olam-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.olam-popup-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.olam-nav-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.olam-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.olam-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.olam-nav-info {
+  font-size: 12px;
+  color: white;
+  min-width: 35px;
+  text-align: center;
+}
+
+.olam-popup-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.olam-popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Popup Content */
+.olam-popup-content {
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Loading */
+.olam-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.olam-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #4299e1;
+  border-radius: 50%;
+  animation: olamSpin 0.8s linear infinite;
+}
+
+@keyframes olamSpin {
+  to { transform: rotate(360deg); }
+}
+
+.olam-loading p {
+  color: #718096;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Results */
+.olam-results {
+  color: #2d3748;
+}
+
+.olam-word {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c5282;
+  margin-bottom: 12px;
+}
+
+/* Tag Filters */
+.olam-tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.olam-tag-filter {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.olam-tag-filter:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.olam-tag-filter.active {
+  border-color: #4299e1;
+  background: #ebf8ff;
+  color: #2c5282;
+}
+
+/* Inactive state - grayed out when another filter is active */
+.olam-tag-filter.inactive {
+  opacity: 0.4;
+  background: #f7fafc;
+  color: #a0aec0;
+  border-color: #e2e8f0;
+}
+
+.olam-tag-filter.inactive:hover {
+  opacity: 0.6;
+}
+
+.olam-tag-filter.tag-ekkurup {
+  background: #c6f6d5;
+  border-color: #48bb78;
+  color: #22543d;
+}
+
+.olam-tag-filter.tag-ekkurup.active {
+  background: #48bb78;
+  color: white;
+}
+
+.olam-tag-filter.tag-crowd {
+  background: #fed7d7;
+  border-color: #fc8181;
+  color: #742a2a;
+}
+
+.olam-tag-filter.tag-crowd.active {
+  background: #fc8181;
+  color: white;
+}
+
+.olam-meaning {
+  font-size: 16px;
+  color: #2c5282;
+  margin-bottom: 8px;
+  font-family: 'Meera', 'Noto Sans Malayalam', sans-serif;
+  line-height: 1.5;
+}
+
+.olam-type {
+  display: inline-block;
+  font-size: 11px;
+  color: #718096;
+  background: #edf2f7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.olam-link {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.olam-link a {
+  color: #4299e1;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.olam-link a:hover {
+  text-decoration: underline;
+}
+
+/* No Results */
+.olam-no-results {
+  text-align: center;
+  padding: 20px;
+  color: #718096;
+}
+
+.olam-no-results p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Error */
+.olam-error {
+  padding: 12px;
+  background: #fed7d7;
+  color: #c53030;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Scrollbar for popup content */
+.olam-popup-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.olam-popup-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.olam-popup-content::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+.olam-popup-content::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* ==================== EXTENSION POPUP STYLES (for toolbar icon) ==================== */
+
+/* Olam Dictionary Chrome Extension Styles */
+/* Inspired by olam.in theme */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Meera', 'Noto Sans Malayalam', 'Apple Color Emoji', 'Segoe UI Emoji';
+  background: #ffffff;
+  color: #333;
+  width: 450px;
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.container {
+  padding: 20px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 15px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c5282;
+  margin-bottom: 5px;
+}
+
+.tagline {
+  font-size: 12px;
+  color: #718096;
+  font-family: 'Meera', 'Noto Sans Malayalam', sans-serif;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  margin-bottom: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.search-box:focus-within {
+  border-color: #4299e1;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 12px 15px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+#searchBtn {
+  background: #4299e1;
+  border: none;
+  padding: 0 20px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s;
+}
+
+#searchBtn:hover {
+  background: #3182ce;
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.language-selector label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.language-selector input[type="radio"] {
+  cursor: pointer;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 15px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #4299e1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading p {
+  color: #718096;
+  font-size: 14px;
+}
+
+/* Results */
+.results {
+  margin-top: 20px;
+}
+
+.entry {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f7fafc;
+  border-radius: 8px;
+  border-left: 4px solid #4299e1;
+}
+
+.word-header h2 {
+  font-size: 22px;
+  color: #2d3748;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.relation {
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.relation:last-child {
+  border-bottom: none;
+}
+
+.meaning {
+  font-size: 18px;
+  color: #2c5282;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-family: 'Meera', 'Noto Sans Malayalam', sans-serif;
+  line-height: 1.6;
+}
+
+.type {
+  display: inline-block;
+  font-size: 12px;
+  color: #718096;
+  font-style: italic;
+  background: #edf2f7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.notes {
+  font-size: 13px;
+  color: #4a5568;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  background: #bee3f8;
+  color: #2c5282;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+/* No Results */
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: #718096;
+}
+
+.no-results p {
+  font-size: 16px;
+}
+
+/* Error */
+.error {
+  padding: 15px;
+  background: #fed7d7;
+  color: #c53030;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* More Info */
+.more-info {
+  font-size: 13px;
+  color: #4299e1;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Full Link */
+.full-link {
+  margin-top: 20px;
+  padding: 15px;
+  text-align: center;
+  background: #edf2f7;
+  border-radius: 8px;
+}
+
+.full-link a {
+  color: #2c5282;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s;
+}
+
+.full-link a:hover {
+  color: #4299e1;
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+footer a {
+  color: #4299e1;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Scrollbar */
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}

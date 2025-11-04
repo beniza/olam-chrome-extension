@@ -1,0 +1,17 @@
+# Node modules (if you add any build tools later)
+node_modules/
+
+# Extension package files
+*.crx
+*.pem
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
