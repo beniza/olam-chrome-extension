@@ -1,123 +1,414 @@
 # Olam Dictionary Chrome Extension
 
-A Chrome extension that integrates the Olam English-Malayalam dictionary into any webpage. Select text on any website and instantly search it in the comprehensive Olam dictionary.
+> 🎯 **Quick dictionary lookups for English-Malayalam translations on any webpage**
 
-## Features
+A powerful Chrome extension that seamlessly integrates the [Olam.in](https://olam.in) English-Malayalam dictionary into your browsing experience. Get instant translations with just a double-click or right-click.
 
-- 🔍 **Text Selection Search**: Right-click on selected text and search in Olam dictionary
-- 🌐 **Bi-directional Support**: 
-  - English → Malayalam
-  - Malayalam → Malayalam
-- 🎨 **Beautiful UI**: Clean interface matching olam.in's design
-- ⚡ **Fast Search**: Instant results using Olam's API
-- 🔄 **Auto Language Detection**: Automatically detects Malayalam script
-- 💾 **Search History**: Remembers your last search
-
-## Installation
-
-### For Development
-
-1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" (toggle in top-right corner)
-4. Click "Load unpacked"
-5. Select the `chrome-plugin` directory
-
-### Icons Required
-
-Before loading the extension, you need to add icon files to the `icons/` directory:
-- `icon16.png` (16×16 pixels)
-- `icon48.png` (48×48 pixels)
-- `icon128.png` (128×128 pixels)
-
-See `icons/README.md` for details on creating icons.
-
-## Usage
-
-### Method 1: Context Menu (Right-click)
-1. Select any text on a webpage
-2. Right-click and choose "Search '[text]' in Olam Dictionary"
-3. View results in the popup window
-
-### Method 2: Extension Popup
-1. Click the Olam extension icon in Chrome toolbar
-2. Type or paste text in the search box
-3. Select language direction (English→Malayalam or Malayalam→Malayalam)
-4. Click search or press Enter
-
-## Project Structure
-
-```
-chrome-plugin/
-├── manifest.json       # Extension configuration
-├── background.js       # Background service worker (API calls, context menu)
-├── content.js          # Content script (text selection detection)
-├── popup.html          # Extension popup interface
-├── popup.js            # Popup logic and UI handling
-├── styles.css          # Styling (matches olam.in theme)
-├── icons/              # Extension icons directory
-│   └── README.md       # Instructions for creating icons
-└── README.md           # This file
-```
-
-## API Integration
-
-This extension uses the Olam dictionary API:
-- **Base URL**: `https://olam.in/api/dictionary/{from_lang}/{to_lang}/{word}`
-- **Supported Languages**: 
-  - `english` → `malayalam`
-  - `malayalam` → `malayalam`
-
-### Example API Call
-```
-https://olam.in/api/dictionary/english/malayalam/hello
-```
-
-## Permissions
-
-The extension requires:
-- `contextMenus`: For right-click menu integration
-- `storage`: For saving search history
-- `https://olam.in/*`: For API access
-
-## Technologies Used
-
-- **Manifest V3**: Latest Chrome extension standard
-- **Vanilla JavaScript**: No external dependencies
-- **CSS3**: Modern styling with flexbox
-- **Olam API**: Dictionary data source
-
-## Browser Compatibility
-
-- ✅ Google Chrome (Manifest V3)
-- ✅ Microsoft Edge (Chromium)
-- ✅ Brave Browser
-- ✅ Other Chromium-based browsers
-
-## Future Enhancements
-
-Potential features to add:
-- [ ] Offline mode with cached results
-- [ ] Search history panel
-- [ ] Pronunciation audio
-- [ ] Export/save favorite words
-- [ ] Dark mode theme
-- [ ] Keyboard shortcuts
-- [ ] Firefox version
-
-## Credits
-
-- Dictionary data powered by [Olam.in](https://olam.in)
-- Malayalam language support
-
-## License
-
-This extension is an independent project and is not officially affiliated with olam.in. Please respect their API usage policies.
-
-## Support
-
-For issues or suggestions, please open an issue in the repository.
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Manifest](https://img.shields.io/badge/manifest-v3-green)
+![License](https://img.shields.io/badge/license-MIT-orange)
 
 ---
 
-**Note**: Make sure to create and add icon files before loading the extension in Chrome.
+## ✨ Features
+
+### Core Functionality
+- �️ **Double-Click Search**: Simply double-click any word to see its translation
+- 📋 **Context Menu Search**: Right-click selected text for instant lookup
+- � **Bi-directional Translation**: English ↔ Malayalam support
+- 🔄 **Auto Language Detection**: Automatically identifies Malayalam text (Unicode U+0D00-U+0D7F)
+- � **Smart Positioning**: Popup appears near cursor and adjusts to stay on-screen
+- 🖐️ **Draggable Popup**: Move the popup anywhere by dragging the title bar
+
+### Advanced Features
+- 📑 **Multiple Entries Navigation**: Browse through different dictionary entries with prev/next buttons
+- 🏷️ **Source Filtering**: Filter results by dictionary source (E.K. Kurup, Crowd Sourced)
+- ⚙️ **Customizable Settings**: Configure double-click, language preferences, and result limits
+- 🎨 **Clean UI**: Beautiful design matching Olam.in's aesthetic
+- ⚡ **Fast & Responsive**: Results appear in under 1 second
+- 🛡️ **Layout Protection**: Doesn't interfere with page layout or content
+
+### User Settings
+- **Double-Click Toggle**: Enable/disable double-click functionality
+- **Language Preferences**: Choose source and target languages (Auto-detect, English, Malayalam)
+- **Result Limit**: Display 3, 5, 10, or all translation words
+
+---
+
+## 🚀 Installation
+
+### For End Users (Recommended)
+
+1. **Download the Extension**
+   - Download the latest release ZIP file
+   - Extract all files to a folder (e.g., `olam-dictionary-extension`)
+
+2. **Load in Chrome**
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable **"Developer mode"** (toggle in top-right corner)
+   - Click **"Load unpacked"**
+   - Select the extracted extension folder
+   - The extension icon appears in your toolbar
+
+3. **Start Using**
+   - Visit any webpage
+   - Double-click any English or Malayalam word
+   - Enjoy instant translations!
+
+📚 **Detailed installation and testing guide**: See [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+
+### For Developers
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd chrome-plugin
+
+# Checkout the latest version
+git checkout refactor/code-standardization
+
+# Load in Chrome
+# 1. Go to chrome://extensions/
+# 2. Enable Developer mode
+# 3. Click "Load unpacked"
+# 4. Select the chrome-plugin directory
+```
+
+---
+
+## 📖 Usage Guide
+
+### Double-Click Search
+1. Visit any webpage with English or Malayalam text
+2. **Double-click** on a word
+3. A popup appears with translations near your cursor
+4. Click the **× button**, press **Escape**, or click outside to close
+
+### Context Menu Search
+1. **Select** text by clicking and dragging
+2. **Right-click** on the selected text
+3. Choose **"Search [word] in Olam Dictionary"**
+4. Results appear in a popup
+
+### Navigating Results
+- Use **‹** and **›** buttons to browse multiple dictionary entries
+- Click source filter buttons (**E.K. Kurup**, **Crowd Sourced**) to filter results
+- Click **"View full details →"** to open the complete entry on Olam.in
+
+### Moving the Popup
+- **Hover** over the blue title bar (cursor changes to move icon)
+- **Click and drag** to reposition the popup anywhere on screen
+
+### Accessing Settings
+- Click the **⚙ gear icon** in the popup header
+- Or click the extension icon in Chrome toolbar → **Options**
+
+---
+
+## ⚙️ Configuration
+
+Access settings by clicking the gear icon (⚙) in any dictionary popup.
+
+### Available Settings
+
+| Setting | Options | Default | Description |
+|---------|---------|---------|-------------|
+| **Double-click to search** | On/Off | On | Enable or disable double-click word lookup |
+| **Search from** | Auto-detect, English, Malayalam | Auto-detect | Source language for context menu searches |
+| **Translate to** | Malayalam, English | Malayalam | Target language for translations |
+| **Number of words** | 3, 5, 10, All | 3 | How many translation words to display |
+
+> **Note**: Double-click search always auto-detects language. Language settings apply to context menu searches.
+
+---
+
+## 📁 Project Structure
+
+```
+chrome-plugin/
+├── manifest.json              # Extension configuration (Manifest V3)
+├── content.js                 # Main content script (modular architecture)
+├── background.js              # Service worker (API, context menu)
+├── popup.html                 # Extension toolbar popup
+├── popup.js                   # Popup functionality
+├── options.html               # Settings page
+├── options.js                 # Settings management
+├── styles.css                 # All styling (623 lines)
+├── icons/                     # Extension icons
+│   ├── icon16.png            # 16×16 toolbar icon
+│   ├── icon48.png            # 48×48 extension icon
+│   └── icon128.png           # 128×128 store icon
+├── README.md                  # This file
+├── TESTING_CHECKLIST.md       # Comprehensive testing guide
+├── REFACTORING.md            # Architecture documentation
+├── CODE_REVIEW.md            # Code review notes
+├── IMPLEMENTATION.md         # Implementation details
+└── plugin-description.json    # Extension metadata
+```
+
+### Code Architecture
+
+**Refactored & Modular Design (v1.1.0)**
+
+**Content Script** (`content.js` - 900+ lines)
+- **AppState**: Centralized state management
+- **Settings**: User preference handling
+- **API**: Dictionary API communication
+- **UI**: DOM manipulation and popup lifecycle
+- **Renderer**: Results rendering and display
+- **SearchController**: Search orchestration
+- **EventHandlers**: User interaction management
+
+**Background Worker** (`background.js` - 280+ lines)
+- **OlamAPI**: API service with caching
+- **SettingsService**: Language preferences
+- **ContextMenuService**: Right-click menu
+- **MessageHandler**: Inter-script communication
+- **Constants**: Configuration values
+
+📖 **Architecture details**: See [REFACTORING.md](REFACTORING.md)
+
+---
+
+## 🔌 API Integration
+
+### Olam Dictionary API
+
+- **Base URL**: `https://olam.in/api/dictionary/{from_lang}/{to_lang}/{word}`
+- **Supported Languages**: 
+  - `english` → `malayalam`
+  - `malayalam` → `english`
+  - `malayalam` → `malayalam`
+
+### Example API Calls
+```bash
+# English to Malayalam
+https://olam.in/api/dictionary/english/malayalam/hello
+
+# Malayalam to English
+https://olam.in/api/dictionary/malayalam/english/മലയാളം
+
+# Malayalam to Malayalam
+https://olam.in/api/dictionary/malayalam/malayalam/നമസ്കാരം
+```
+
+### Response Caching
+Results are cached locally using `chrome.storage.local` for improved performance.
+
+---
+
+## 🔐 Permissions
+
+The extension requires the following Chrome permissions:
+
+| Permission | Purpose |
+|------------|---------|
+| `contextMenus` | Add "Search in Olam Dictionary" to right-click menu |
+| `storage` | Save user settings and cache search results |
+| `https://olam.in/*` | Access Olam API for dictionary lookups |
+
+**No data collection**: This extension does not collect, store, or transmit any personal data.
+
+---
+
+## 🌐 Browser Compatibility
+
+| Browser | Status | Notes |
+|---------|--------|-------|
+| Google Chrome | ✅ Fully Supported | Chrome 88+ (Manifest V3) |
+| Microsoft Edge | ✅ Fully Supported | Edge 88+ (Chromium) |
+| Brave Browser | ✅ Fully Supported | Latest version |
+| Opera | ✅ Expected to work | Chromium-based |
+| Firefox | ❌ Not supported | Requires Manifest V2 adaptation |
+
+---
+
+## 🧪 Testing
+
+Comprehensive testing checklist available for quality assurance:
+
+- **Manual Testing**: [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+  - 16 test categories
+  - Step-by-step instructions
+  - Expected results for each test
+  - Issue tracking form
+  - First-time user installation guide
+
+**Test Coverage:**
+- ✅ Double-click search (English & Malayalam)
+- ✅ Context menu search
+- ✅ Popup behavior (positioning, dragging, closing)
+- ✅ Navigation and filtering
+- ✅ Settings configuration
+- ✅ Performance and reliability
+- ✅ Cross-browser compatibility
+
+---
+
+## 🛠️ Development
+
+### Prerequisites
+- Node.js (optional, for future tooling)
+- Chrome 88+ or compatible browser
+- Basic understanding of Chrome Extension APIs
+
+### Setup Development Environment
+```bash
+# Clone the repository
+git clone <repository-url>
+cd chrome-plugin
+
+# Install dependencies (if applicable)
+npm install
+
+# Load extension in Chrome
+# chrome://extensions/ → Developer mode → Load unpacked
+```
+
+### Code Style
+- Modern JavaScript (ES6+)
+- Modular architecture with clear separation of concerns
+- Comprehensive JSDoc documentation
+- Consistent naming conventions
+
+### Making Changes
+1. Create a feature branch from `refactor/code-standardization`
+2. Make your changes following the modular structure
+3. Test thoroughly using [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+4. Document changes in commit messages
+5. Submit pull request
+
+---
+
+## 📊 Version History
+
+### v1.1.0 (Current - Refactored)
+- ✨ Complete codebase refactoring with modular architecture
+- ✨ Added Malayalam word double-click support
+- ✨ Draggable popup functionality
+- ✨ Configurable result limit (3, 5, 10, or all words)
+- ✨ Auto-detect language option
+- ✨ Comprehensive settings page
+- 🐛 Fixed template string syntax issues
+- 🐛 Fixed context menu search with proper language handling
+- 🐛 Fixed page layout interference
+- 📚 Added extensive documentation (REFACTORING.md, TESTING_CHECKLIST.md)
+
+### v1.0.1
+- 🐛 Fixed page layout shrinkage issue
+- 🐛 Added CSS isolation
+- ⚙️ Added settings gear icon
+
+### v1.0.0
+- 🎉 Initial release
+- 🔍 Basic double-click and context menu search
+- 🌐 English-Malayalam translation
+- 🎨 Clean popup UI
+
+---
+
+## 🚧 Roadmap
+
+### Planned Features
+- [ ] **Offline Mode**: Cache frequently used words for offline access
+- [ ] **Search History Panel**: View and manage your search history
+- [ ] **Pronunciation Audio**: Listen to word pronunciations
+- [ ] **Favorites/Bookmarks**: Save and organize favorite words
+- [ ] **Dark Mode**: Eye-friendly dark theme option
+- [ ] **Keyboard Shortcuts**: Custom hotkeys for quick access
+- [ ] **Firefox Support**: Port to Firefox with Manifest V2
+- [ ] **Unit Tests**: Automated testing with Jest/Mocha
+- [ ] **TypeScript Migration**: Add type safety
+- [ ] **Chrome Web Store**: Publish for easy installation
+
+### Future Enhancements
+- [ ] Export search history to CSV/JSON
+- [ ] Integration with other dictionary APIs
+- [ ] Word of the day notification
+- [ ] Spaced repetition learning mode
+- [ ] Browser sync for settings and history
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. **Report Bugs**: Use the issue tracker to report problems
+2. **Suggest Features**: Share your ideas for improvements
+3. **Submit Pull Requests**: Help improve the code
+4. **Test**: Try the extension and provide feedback
+5. **Documentation**: Improve or translate documentation
+
+### Contribution Guidelines
+- Follow existing code style and architecture
+- Add tests for new features
+- Update documentation
+- Write clear commit messages
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see below for details:
+
+```
+MIT License
+
+Copyright (c) 2025 Olam Dictionary Extension Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+```
+
+---
+
+## 🙏 Credits & Acknowledgments
+
+- **Dictionary Data**: Powered by [Olam.in](https://olam.in) - India's first open-source Malayalam dictionary
+- **Malayalam Language**: Unicode Consortium for Malayalam script support
+- **Community**: Thanks to all testers and contributors
+
+> **Disclaimer**: This extension is an independent project and is not officially affiliated with or endorsed by Olam.in. Please respect their API usage policies and terms of service.
+
+---
+
+## 📞 Support
+
+### Getting Help
+- 📖 **Documentation**: Read [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md) for detailed guides
+- 🐛 **Bug Reports**: Open an issue with reproduction steps
+- 💡 **Feature Requests**: Suggest improvements via issues
+- 📧 **Contact**: Reach out through the repository
+
+### Troubleshooting
+See the [Troubleshooting section](TESTING_CHECKLIST.md#-troubleshooting) in the testing checklist for common issues and solutions.
+
+---
+
+## 🌟 Show Your Support
+
+If you find this extension useful:
+- ⭐ Star the repository
+- 🐛 Report bugs and issues
+- 💡 Suggest new features
+- 📢 Share with others who might benefit
+- 🤝 Contribute to the codebase
+
+---
+
+**Made with ❤️ for the Malayalam language community**
+
+*Last updated: November 2025*
+
