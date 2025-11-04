@@ -21,6 +21,7 @@ const AppState = {
   
   // User Settings
   doubleClickEnabled: true,
+  resultLimit: 3,
   
   // Search State
   currentData: null,
@@ -122,8 +123,9 @@ const Settings = {
    */
   async load() {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(['doubleClickEnabled'], (result) => {
+      chrome.storage.sync.get(['doubleClickEnabled', 'resultLimit'], (result) => {
         AppState.doubleClickEnabled = result.doubleClickEnabled !== false;
+        AppState.resultLimit = result.resultLimit === 'all' ? 'all' : parseInt(result.resultLimit || '3', 10);
         resolve();
       });
     });
@@ -136,6 +138,9 @@ const Settings = {
     chrome.storage.onChanged.addListener((changes, namespace) => {
       if (changes.doubleClickEnabled) {
         AppState.doubleClickEnabled = changes.doubleClickEnabled.newValue;
+      }
+      if (changes.resultLimit) {
+        AppState.resultLimit = changes.resultLimit.newValue === 'all' ? 'all' : parseInt(changes.resultLimit.newValue || '3', 10);
       }
     });
   }
@@ -592,9 +597,19 @@ const Renderer = {
     const meaningDiv = document.createElement('div');
     meaningDiv.className = 'olam-meaning';
     
-    const words = relation.content.slice(0, 3);
+    const limit = AppState.resultLimit;
+    let words;
+    let hasMore = false;
+    
+    if (limit === 'all') {
+      words = relation.content;
+    } else {
+      words = relation.content.slice(0, limit);
+      hasMore = relation.content.length > limit;
+    }
+    
     meaningDiv.textContent = words.join(', ');
-    if (relation.content.length > 3) {
+    if (hasMore) {
       meaningDiv.textContent += '...';
     }
     

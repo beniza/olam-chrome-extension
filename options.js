@@ -3,16 +3,35 @@ document.addEventListener('DOMContentLoaded', function() {
   const doubleClickCheckbox = document.getElementById('doubleClickEnabled');
   const fromLanguageSelect = document.getElementById('fromLanguage');
   const toLanguageSelect = document.getElementById('toLanguage');
+  const resultLimitSelect = document.getElementById('resultLimit');
+  const allWordsWarning = document.getElementById('allWordsWarning');
   const statusDiv = document.getElementById('status');
   
   // Load saved settings
-  chrome.storage.sync.get(['doubleClickEnabled', 'fromLanguage', 'toLanguage'], function(result) {
+  chrome.storage.sync.get(['doubleClickEnabled', 'fromLanguage', 'toLanguage', 'resultLimit'], function(result) {
     // Default to true if not set
     doubleClickCheckbox.checked = result.doubleClickEnabled !== false;
     
     // Set language preferences (defaults: auto -> malayalam)
     fromLanguageSelect.value = result.fromLanguage || 'auto';
     toLanguageSelect.value = result.toLanguage || 'malayalam';
+    
+    // Set result limit (default: 3)
+    resultLimitSelect.value = result.resultLimit || '3';
+    
+    // Show warning if 'all' is selected
+    if (resultLimitSelect.value === 'all') {
+      allWordsWarning.style.display = 'block';
+    }
+  });
+  
+  // Show/hide warning when result limit changes
+  resultLimitSelect.addEventListener('change', function() {
+    if (resultLimitSelect.value === 'all') {
+      allWordsWarning.style.display = 'block';
+    } else {
+      allWordsWarning.style.display = 'none';
+    }
   });
   
   // Show status message helper
@@ -40,6 +59,13 @@ document.addEventListener('DOMContentLoaded', function() {
   toLanguageSelect.addEventListener('change', function() {
     chrome.storage.sync.set({
       toLanguage: toLanguageSelect.value
+    }, showStatus);
+  });
+  
+  // Save settings when result limit changes
+  resultLimitSelect.addEventListener('change', function() {
+    chrome.storage.sync.set({
+      resultLimit: resultLimitSelect.value
     }, showStatus);
   });
 });

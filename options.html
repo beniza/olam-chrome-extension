@@ -250,6 +250,30 @@
       </div>
     </div>
     
+    <div class="setting-group">
+      <div class="setting-info">
+        <div class="setting-title" style="margin-bottom: 15px;">Display Settings</div>
+        <div class="setting-description" style="margin-bottom: 15px;">
+          Control how many translation words are shown in the popup
+        </div>
+        
+        <div class="form-group">
+          <label for="resultLimit">Number of words to display:</label>
+          <div class="select-wrapper">
+            <select id="resultLimit">
+              <option value="3">3 words (Default)</option>
+              <option value="5">5 words</option>
+              <option value="10">10 words</option>
+              <option value="all">All words</option>
+            </select>
+          </div>
+          <div id="allWordsWarning" style="display: none; margin-top: 10px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; font-size: 13px; color: #856404;">
+            ⚠️ Showing all words may make the popup very large for some entries
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div id="status" class="status">Settings saved!</div>
   </div>
   
