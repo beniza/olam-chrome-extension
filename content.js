@@ -68,8 +68,9 @@ function createPopup() {
         <button class="olam-nav-btn" id="olam-next-btn" title="Next entry">›</button>
       </div>
       
+      <button class="olam-popup-settings" id="olam-settings-btn" title="Settings">⚙</button>
       <button class="olam-popup-close" id="olam-close-btn" title="Close">×</button>
-    </div>
+    </div>`;
     
     <div class="olam-popup-content">
       <!-- Loading indicator -->
@@ -99,6 +100,11 @@ function createPopup() {
   
   // Close button
   popup.querySelector('#olam-close-btn').addEventListener('click', hidePopup);
+  
+  // Settings button - opens options page
+  popup.querySelector('#olam-settings-btn').addEventListener('click', function() {
+    chrome.runtime.sendMessage({ action: 'openOptions' });
+  });
   
   return popup;
 }
