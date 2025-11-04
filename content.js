@@ -707,12 +707,56 @@ const EventHandlers = {
       if (!AppState.doubleClickEnabled) return;
       if (AppState.popup?.contains(e.target)) return;
       
-      const word = window.getSelection().toString().trim();
+      let word = window.getSelection().toString().trim();
       
-      if (word.length > 0 && word.length < 100) {
+      // If no selection (common with Malayalam text), try to extract word manually
+      if (!word && e.target.nodeType === Node.TEXT_NODE || e.target.firstChild?.nodeType === Node.TEXT_NODE) {
+        word = this.extractWordAtPoint(e.target, e);
+      }
+      
+      if (word && word.length > 0 && word.length < 100) {
         SearchController.search(word, e.clientX, e.clientY);
       }
     });
+  },
+  
+  /**
+   * Extract word at click point (for Malayalam and other scripts)
+   * @param {Node} node - Target node
+   * @param {Event} event - Click event
+   * @returns {string} Extracted word
+   */
+  extractWordAtPoint(node, event) {
+    const textNode = node.nodeType === Node.TEXT_NODE ? node : node.firstChild;
+    if (!textNode || textNode.nodeType !== Node.TEXT_NODE) return '';
+    
+    const text = textNode.textContent;
+    const range = document.caretRangeFromPoint(event.clientX, event.clientY);
+    if (!range) return '';
+    
+    const offset = range.startOffset;
+    
+    // Define word boundary patterns for different scripts
+    // Malayalam: continuous Malayalam characters
+    // English: alphanumeric and hyphens
+    const wordPattern = /[\u0D00-\u0D7F]+|[a-zA-Z0-9\-]+/g;
+    
+    let match;
+    while ((match = wordPattern.exec(text)) !== null) {
+      if (offset >= match.index && offset <= match.index + match[0].length) {
+        // Select the word
+        const selection = window.getSelection();
+        const newRange = document.createRange();
+        newRange.setStart(textNode, match.index);
+        newRange.setEnd(textNode, match.index + match[0].length);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+        
+        return match[0];
+      }
+    }
+    
+    return '';
   },
   
   /**
