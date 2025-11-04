@@ -61,7 +61,6 @@ function createPopup() {
         <span>Olam Dictionary</span>
       </div>
       
-      <!-- Navigation buttons (hidden when only 1 entry) -->
       <div class="olam-popup-nav" id="olam-nav" style="display: none;">
         <button class="olam-nav-btn" id="olam-prev-btn" title="Previous entry">‹</button>
         <span class="olam-nav-info" id="olam-nav-info">1/1</span>
@@ -70,19 +69,16 @@ function createPopup() {
       
       <button class="olam-popup-settings" id="olam-settings-btn" title="Settings">⚙</button>
       <button class="olam-popup-close" id="olam-close-btn" title="Close">×</button>
-    </div>`;
+    </div>
     
     <div class="olam-popup-content">
-      <!-- Loading indicator -->
       <div class="olam-loading">
         <div class="olam-spinner"></div>
         <p>Searching...</p>
       </div>
       
-      <!-- Results container -->
       <div class="olam-results" id="olam-results"></div>
       
-      <!-- No results message -->
       <div class="olam-no-results" id="olam-no-results" style="display: none;">
         <p>No results found</p>
       </div>
