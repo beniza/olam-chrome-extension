@@ -219,6 +219,46 @@ The extension requires the following Chrome permissions:
 
 ## 🧪 Testing
 
+### Automated Testing
+
+Comprehensive automated test suite using Jest:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+**Test Statistics:**
+- **Total Tests**: 100
+- **Test Suites**: 7
+- **Coverage**: Unit tests, Integration tests
+
+**Test Breakdown:**
+- 📦 **AppState (16 tests)**: State management, configuration loading, settings updates
+- 🔌 **API Service (11 tests)**: Content script API, language detection, search functionality  
+- 🌐 **OlamAPI (17 tests)**: Background API communication, caching, error handling
+- ⚙️ **Settings Service (7 tests)**: Chrome storage, default values, validation
+- 🔗 **URL Builder (19 tests)**: URL construction, encoding, consistency
+- 📋 **Constants (27 tests)**: Configuration values, exports, structure validation
+- 🔄 **Integration (3 tests)**: End-to-end search flow, component interaction
+
+**Test Coverage:**
+- ✅ Language detection (detectLanguage utility)
+- ✅ URL building (buildApiUrl, buildDictionaryUrl)
+- ✅ Constants validation (API URLs, defaults, supported languages)
+- ✅ API communication and caching
+- ✅ Settings storage and retrieval
+- ✅ State management
+- ✅ Integration flows
+
+### Manual Testing
+
 Comprehensive testing checklist available for quality assurance:
 
 - **Manual Testing**: [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
@@ -228,7 +268,7 @@ Comprehensive testing checklist available for quality assurance:
   - Issue tracking form
   - First-time user installation guide
 
-**Test Coverage:**
+**Manual Test Coverage:**
 - ✅ Double-click search (English & Malayalam)
 - ✅ Context menu search
 - ✅ Popup behavior (positioning, dragging, closing)
@@ -252,8 +292,11 @@ Comprehensive testing checklist available for quality assurance:
 git clone https://github.com/beniza/olam-chrome-extension.git
 cd olam-chrome-extension
 
-# Install dependencies (if applicable)
+# Install dependencies
 npm install
+
+# Run tests
+npm test
 
 # Load extension in Chrome
 # chrome://extensions/ → Developer mode → Load unpacked
