@@ -717,7 +717,7 @@ const SearchController = {
       const data = await API.search(text);
       
       if (data?.data?.entries?.length > 0) {
-        const fromLang = API.detectLanguage(text);
+        const fromLang = detectLanguage(text);
         AppState.setSearchData(data, text, fromLang, 'malayalam');
         UI.hideLoading();
         Renderer.renderResults();
@@ -746,7 +746,7 @@ const SearchController = {
     UI.hideLoading();
     
     if (data?.data?.entries?.length > 0) {
-      const fromLang = API.detectLanguage(word);
+      const fromLang = detectLanguage(word);
       AppState.setSearchData(data, word, fromLang, 'malayalam');
       Renderer.renderResults();
     } else {
