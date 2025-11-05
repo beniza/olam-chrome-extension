@@ -5,12 +5,256 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Olam Dictionary</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      width: 400px;
+      min-height: 300px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .container {
+      padding: 16px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 12px;
+    }
+    .header-left {
+      flex: 1;
+    }
+    .logo {
+      margin: 0;
+      font-size: 24px;
+      color: #1976d2;
+    }
+    .tagline {
+      margin: 4px 0 0 0;
+      font-size: 11px;
+      color: #666;
+    }
+    .settings-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #666;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .settings-icon:hover {
+      background: #f0f0f0;
+    }
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    #searchInput {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    #searchInput:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+    #searchBtn {
+      padding: 10px 16px;
+      background: #1976d2;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #searchBtn:hover {
+      background: #1565c0;
+    }
+    .language-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .language-selector label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: #666;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #1976d2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .results {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .navigation-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 0;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .nav-button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .nav-button:hover:not(:disabled) {
+      background: #1565c0;
+    }
+    .nav-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .entry-counter {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+      min-width: 60px;
+      text-align: center;
+    }
+    .source-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .source-filter {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .source-filter:hover {
+      background: #e0e0e0;
+    }
+    .source-filter.active {
+      background: #1976d2;
+      color: white;
+      border-color: #1976d2;
+    }
+    .entry {
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    .word-header h2 {
+      margin: 0 0 12px 0;
+      font-size: 20px;
+      color: #333;
+    }
+    .relation {
+      margin-bottom: 12px;
+      padding: 12px;
+      background: white;
+      border-radius: 4px;
+      border-left: 3px solid #1976d2;
+    }
+    .meaning {
+      font-size: 15px;
+      color: #333;
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+    .type {
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+    }
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+    .no-results strong {
+      color: #333;
+      font-size: 16px;
+    }
+    .no-results a {
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .no-results a:hover {
+      text-decoration: underline;
+    }
+    .full-link {
+      text-align: center;
+      padding: 16px 0;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 16px;
+    }
+    .full-link a {
+      color: #1976d2;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .full-link a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 12px 0 0 0;
+      font-size: 11px;
+      color: #999;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 16px;
+    }
+    footer a {
+      color: #1976d2;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1 class="logo">Olam</h1>
-      <p class="tagline">അതിവേഗ ഇംഗ്ലീഷ് → മലയാളം നിഘണ്ടു</p>
+      <div class="header-left">
+        <h1 class="logo">Olam</h1>
+        <p class="tagline">അതിവേഗ ഇംഗ്ലീഷ് → മലയാളം നിഘണ്ടു</p>
+      </div>
+      <button class="settings-icon" id="settingsBtn" title="Settings">⚙</button>
     </header>
 
     <div class="search-box">
@@ -44,10 +288,23 @@
       <p>Searching...</p>
     </div>
 
+    <div id="navigationControls" class="navigation-controls" style="display: none;">
+      <button id="prevBtn" class="nav-button">‹</button>
+      <span id="entryCounter" class="entry-counter"></span>
+      <button id="nextBtn" class="nav-button">›</button>
+    </div>
+
+    <div id="sourceFilters" class="source-filters" style="display: none;"></div>
+
     <div id="results" class="results"></div>
 
     <div id="noResults" class="no-results" style="display: none;">
-      <p>No results found</p>
+      <p><strong>No results found</strong></p>
+      <p>Your current language setting:<br>
+        <strong>Source: <span id="currentFromLang"></span></strong><br>
+        <strong>Target: <span id="currentToLang"></span></strong>
+      </p>
+      <p><a href="#" id="changeSettings">⚙️ Click here to change settings</a></p>
     </div>
 
     <footer>
@@ -57,6 +314,7 @@
 
   <script src="utils/constants.js"></script>
   <script src="utils/urlBuilder.js"></script>
+  <script src="services/appState.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
