@@ -6,28 +6,10 @@
 
 'use strict';
 
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-const API_BASE_URL = 'https://olam.in/api/dictionary';
-const CONTEXT_MENU_ID = 'searchOlam';
-const DEFAULT_FROM_LANG = 'auto';
-const DEFAULT_TO_LANG = 'malayalam';
-
-// =============================================================================
-// UTILITY FUNCTIONS
-// =============================================================================
-
-/**
- * Detect language from text
- * @param {string} text - Text to analyze
- * @returns {string} Detected language code
- */
-function detectLanguage(text) {
-  // Malayalam characters are in range U+0D00 to U+0D7F
-  return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-}
+// Import shared utilities
+importScripts('utils/constants.js');
+importScripts('utils/detectLanguage.js');
+importScripts('utils/urlBuilder.js');
 
 // =============================================================================
 // API SERVICE
@@ -45,7 +27,7 @@ const OlamAPI = {
    * @returns {Promise<Object>} API response
    */
   async search(text, fromLang, toLang) {
-    const url = `${API_BASE_URL}/${fromLang}/${toLang}/${encodeURIComponent(text)}`;
+    const url = buildApiUrl(fromLang, toLang, text);
     
     try {
       const response = await fetch(url);
@@ -171,12 +153,37 @@ const ContextMenuService = {
       // Perform search
       const data = await OlamAPI.search(text, fromLang, toLang);
       
-      // Send results to content script
-      await chrome.tabs.sendMessage(tab.id, {
-        action: 'showPopup',
-        word: text,
-        data: data
-      });
+      // Ensure content script is injected before sending message
+      try {
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'showPopup',
+          word: text,
+          data: data
+        });
+      } catch (sendError) {
+        // Content script not loaded, inject it first
+        console.log('Content script not loaded, injecting...');
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: CONTENT_SCRIPT_FILES
+        });
+        
+        // Inject CSS
+        await chrome.scripting.insertCSS({
+          target: { tabId: tab.id },
+          files: ['styles.css']
+        });
+        
+        // Wait a bit for initialization
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Try sending message again
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'showPopup',
+          word: text,
+          data: data
+        });
+      }
     } catch (error) {
       console.error('Context menu search error:', error);
     }
@@ -211,6 +218,7 @@ const MessageHandler = {
           
         case 'openOptions':
           this.handleOpenOptions();
+          sendResponse({ success: true });
           return false;
           
         default:
@@ -245,6 +253,14 @@ const MessageHandler = {
     // Auto-detect language if set to 'auto'
     if (fromLang === 'auto') {
       fromLang = detectLanguage(text);
+    }
+    
+    // Validate language combination: Only malayalam is supported as target
+    // Supported: english -> malayalam, malayalam -> malayalam
+    // Not supported: malayalam -> english
+    if (toLang !== 'malayalam') {
+      console.warn(`Unsupported target language: ${toLang}. Forcing to malayalam.`);
+      toLang = 'malayalam';
     }
     
     try {

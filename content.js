@@ -18,6 +18,7 @@
 const AppState = {
   // UI References
   popup: null,
+  popupPosition: null,  // Store original click coordinates for repositioning
   
   // User Settings
   doubleClickEnabled: true,
@@ -152,18 +153,9 @@ const Settings = {
 
 /**
  * API communication handler
+ * Note: detectLanguage is now imported from utils/detectLanguage.js via manifest
  */
 const API = {
-  /**
-   * Detect language from text
-   * @param {string} text - Text to analyze
-   * @returns {string} Detected language code
-   */
-  detectLanguage(text) {
-    // Malayalam characters are in range U+0D00 to U+0D7F
-    return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-  },
-  
   /**
    * Search for a word in Olam dictionary
    * @param {string} text - Word to search
@@ -172,7 +164,7 @@ const API = {
    * @returns {Promise<Object>} API response
    */
   async search(text, fromLang = null, toLang = 'malayalam') {
-    const sourceLang = fromLang || this.detectLanguage(text);
+    const sourceLang = fromLang || detectLanguage(text);
     
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({
@@ -234,7 +226,15 @@ const UI = {
   <div class="olam-results" id="olam-results"></div>
   
   <div class="olam-no-results" id="olam-no-results" style="display: none;">
-    <p>No results found</p>
+    <p><strong>No results found</strong></p>
+    <p class="olam-no-results-hint" style="font-size: 0.9em; color: #64748b; margin-top: 12px; line-height: 1.5;">
+      Your current language setting:<br>
+      <strong style="color: #475569;">Source: <span id="olam-current-from-lang"></span></strong><br>
+      <strong style="color: #475569;">Target: <span id="olam-current-to-lang"></span></strong>
+    </p>
+    <p class="olam-no-results-settings" style="font-size: 0.85em; margin-top: 12px;">
+      <a href="#" id="olam-change-settings" style="color: #3b82f6; text-decoration: none; cursor: pointer;">⚙️ Click here to change settings</a>
+    </p>
   </div>
 </div>`;
   },
@@ -357,17 +357,28 @@ const UI = {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    let left = x + 10;
-    let top = y + 10;
+    // Get page zoom level (visual viewport accounts for zoom)
+    const zoom = window.visualViewport ? window.visualViewport.scale : 1;
     
-    // Adjust if popup goes off-screen
-    if (left + popupRect.width > viewportWidth) {
-      left = viewportWidth - popupRect.width - 20;
+    // Adjust coordinates for zoom
+    const adjustedX = x / zoom;
+    const adjustedY = y / zoom;
+    
+    let left = adjustedX + 10;
+    let top = adjustedY + 10;
+    
+    // Adjust if popup goes off-screen (account for zoom)
+    if (left + popupRect.width > viewportWidth / zoom) {
+      left = (viewportWidth / zoom) - popupRect.width - 20;
     }
     
-    if (top + popupRect.height > viewportHeight) {
-      top = y - popupRect.height - 10;
+    if (top + popupRect.height > viewportHeight / zoom) {
+      top = adjustedY - popupRect.height - 10;
     }
+    
+    // Ensure popup stays within viewport bounds
+    left = Math.max(10, Math.min(left, (viewportWidth / zoom) - popupRect.width - 10));
+    top = Math.max(10, Math.min(top, (viewportHeight / zoom) - popupRect.height - 10));
     
     return { left, top };
   },
@@ -387,6 +398,27 @@ const UI = {
     
     popup.style.left = `${position.left}px`;
     popup.style.top = `${position.top}px`;
+    
+    // Store original coordinates for repositioning
+    AppState.popupPosition = { x, y };
+  },
+  
+  /**
+   * Reposition popup (e.g., after zoom/resize)
+   */
+  repositionPopup() {
+    if (!AppState.popup || !AppState.popupPosition) return;
+    if (!AppState.popup.classList.contains('olam-popup-visible')) return;
+    
+    const popupRect = AppState.popup.getBoundingClientRect();
+    const position = this.calculatePosition(
+      AppState.popupPosition.x, 
+      AppState.popupPosition.y, 
+      popupRect
+    );
+    
+    AppState.popup.style.left = `${position.left}px`;
+    AppState.popup.style.top = `${position.top}px`;
   },
   
   /**
@@ -434,6 +466,35 @@ const UI = {
     const noResultsEl = AppState.popup.querySelector('#olam-no-results');
     
     resultsEl.innerHTML = '';
+    
+    // Update language information
+    const fromLangEl = noResultsEl.querySelector('#olam-current-from-lang');
+    const toLangEl = noResultsEl.querySelector('#olam-current-to-lang');
+    
+    if (fromLangEl && toLangEl) {
+      const fromLangText = AppState.currentFromLang === 'auto' ? 'Auto-detect' : 
+                          AppState.currentFromLang === 'english' ? 'English' : 'Malayalam';
+      const toLangText = AppState.currentToLang === 'malayalam' ? 'Malayalam' : 'English';
+      
+      fromLangEl.textContent = fromLangText;
+      toLangEl.textContent = toLangText;
+    }
+    
+    // Add settings link handler (one-time setup)
+    const settingsLink = noResultsEl.querySelector('#olam-change-settings');
+    if (settingsLink && !settingsLink.hasAttribute('data-listener-added')) {
+      settingsLink.setAttribute('data-listener-added', 'true');
+      settingsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Open options page via background script
+        chrome.runtime.sendMessage({ action: 'openOptions' }, () => {
+          // Close popup after opening settings
+          UI.hidePopup();
+        });
+      });
+    }
+    
     noResultsEl.style.display = 'block';
   },
   
@@ -638,7 +699,7 @@ const Renderer = {
     const linkDiv = document.createElement('div');
     linkDiv.className = 'olam-link';
     linkDiv.innerHTML = `
-      <a href="https://olam.in/dictionary/${AppState.currentFromLang}/${AppState.currentToLang}/${encodeURIComponent(AppState.currentSearchWord)}" target="_blank">
+      <a href="${buildDictionaryUrl(AppState.currentFromLang, AppState.currentToLang, AppState.currentSearchWord)}" target="_blank">
         View full details →
       </a>
     `;
@@ -726,7 +787,7 @@ const SearchController = {
       const data = await API.search(text);
       
       if (data?.data?.entries?.length > 0) {
-        const fromLang = API.detectLanguage(text);
+        const fromLang = detectLanguage(text);
         AppState.setSearchData(data, text, fromLang, 'malayalam');
         UI.hideLoading();
         Renderer.renderResults();
@@ -755,7 +816,7 @@ const SearchController = {
     UI.hideLoading();
     
     if (data?.data?.entries?.length > 0) {
-      const fromLang = API.detectLanguage(word);
+      const fromLang = detectLanguage(word);
       AppState.setSearchData(data, word, fromLang, 'malayalam');
       Renderer.renderResults();
     } else {
@@ -780,6 +841,7 @@ const EventHandlers = {
     this.setupKeyboard();
     this.setupClickOutside();
     this.setupMessageListener();
+    this.setupResizeAndZoom();
   },
   
   /**
@@ -877,6 +939,31 @@ const EventHandlers = {
       }
       return true;
     });
+  },
+  
+  /**
+   * Setup resize and zoom event listeners
+   */
+  setupResizeAndZoom() {
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        UI.repositionPopup();
+      }, 100);
+    });
+    
+    // Handle visual viewport changes (zoom)
+    if (window.visualViewport) {
+      let zoomTimeout;
+      window.visualViewport.addEventListener('resize', () => {
+        clearTimeout(zoomTimeout);
+        zoomTimeout = setTimeout(() => {
+          UI.repositionPopup();
+        }, 100);
+      });
+    }
   },
   
   /**

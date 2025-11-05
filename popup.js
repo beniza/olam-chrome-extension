@@ -48,12 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get selected language
     const fromLang = document.querySelector('input[name="fromLang"]:checked').value;
-    const toLang = 'malayalam';
+    const toLang = DEFAULT_TO_LANG;
 
     console.log('Language direction:', fromLang, '→', toLang);
 
     try {
-      const apiUrl = `https://olam.in/api/dictionary/${fromLang}/${toLang}/${encodeURIComponent(searchText)}`;
+      const apiUrl = buildApiUrl(fromLang, toLang, searchText);
       console.log('API URL:', apiUrl);
       
       const response = await fetch(apiUrl);
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const linkDiv = document.createElement('div');
     linkDiv.className = 'full-link';
     linkDiv.innerHTML = `
-      <a href="https://olam.in/dictionary/${fromLang}/${toLang}/${encodeURIComponent(searchWord)}" target="_blank">
+      <a href="${buildDictionaryUrl(fromLang, toLang, searchWord)}" target="_blank">
         View full details on olam.in →
       </a>
     `;

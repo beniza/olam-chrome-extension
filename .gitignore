@@ -18,3 +18,14 @@ Thumbs.db
 
 # Local files
 .local/
+
+# Build output
+release/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Package lock files
+package-lock.json
+yarn.lock
