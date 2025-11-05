@@ -348,8 +348,6 @@ const UI = {
   calculatePosition(x, y, popupRect) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    const scrollX = window.scrollX || window.pageXOffset;
-    const scrollY = window.scrollY || window.pageYOffset;
     
     // Get page zoom level (visual viewport accounts for zoom)
     const zoom = window.visualViewport ? window.visualViewport.scale : 1;

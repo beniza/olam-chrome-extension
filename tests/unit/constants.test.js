@@ -9,7 +9,8 @@ const {
   DEFAULT_FROM_LANG,
   DEFAULT_TO_LANG,
   SUPPORTED_LANGUAGES,
-  CONTEXT_MENU_ID
+  CONTEXT_MENU_ID,
+  CONTENT_SCRIPT_FILES
 } = require('../../utils/constants');
 
 describe('Constants Module', () => {
@@ -132,6 +133,34 @@ describe('Constants Module', () => {
     });
   });
 
+  describe('Content Script Files', () => {
+    it('should define content script files array', () => {
+      expect(CONTENT_SCRIPT_FILES).toBeDefined();
+      expect(Array.isArray(CONTENT_SCRIPT_FILES)).toBe(true);
+    });
+
+    it('should include all required files in correct order', () => {
+      expect(CONTENT_SCRIPT_FILES).toEqual([
+        'utils/constants.js',
+        'utils/detectLanguage.js',
+        'utils/urlBuilder.js',
+        'content.js'
+      ]);
+    });
+
+    it('should have constants.js loaded first', () => {
+      expect(CONTENT_SCRIPT_FILES[0]).toBe('utils/constants.js');
+    });
+
+    it('should have content.js loaded last', () => {
+      expect(CONTENT_SCRIPT_FILES[CONTENT_SCRIPT_FILES.length - 1]).toBe('content.js');
+    });
+
+    it('should have exactly 4 files', () => {
+      expect(CONTENT_SCRIPT_FILES).toHaveLength(4);
+    });
+  });
+
   describe('Module Exports', () => {
     it('should export all required constants', () => {
       const constants = require('../../utils/constants');
@@ -142,11 +171,12 @@ describe('Constants Module', () => {
       expect(constants).toHaveProperty('DEFAULT_TO_LANG');
       expect(constants).toHaveProperty('SUPPORTED_LANGUAGES');
       expect(constants).toHaveProperty('CONTEXT_MENU_ID');
+      expect(constants).toHaveProperty('CONTENT_SCRIPT_FILES');
     });
 
-    it('should export exactly 6 constants', () => {
+    it('should export exactly 7 constants', () => {
       const constants = require('../../utils/constants');
-      expect(Object.keys(constants)).toHaveLength(6);
+      expect(Object.keys(constants)).toHaveLength(7);
     });
   });
 

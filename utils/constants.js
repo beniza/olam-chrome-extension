@@ -21,6 +21,14 @@ const SUPPORTED_LANGUAGES = {
 // Context Menu
 const CONTEXT_MENU_ID = 'searchOlam';
 
+// Content Script Files (must match manifest.json order for dynamic injection)
+const CONTENT_SCRIPT_FILES = [
+  'utils/constants.js',
+  'utils/detectLanguage.js',
+  'utils/urlBuilder.js',
+  'content.js'
+];
+
 // Export for CommonJS (tests using Jest/Node.js)
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -29,7 +37,8 @@ if (typeof module !== 'undefined' && module.exports) {
     DEFAULT_FROM_LANG,
     DEFAULT_TO_LANG,
     SUPPORTED_LANGUAGES,
-    CONTEXT_MENU_ID
+    CONTEXT_MENU_ID,
+    CONTENT_SCRIPT_FILES
   };
 }
 
@@ -41,4 +50,5 @@ if (typeof self !== 'undefined') {
   self.DEFAULT_TO_LANG = DEFAULT_TO_LANG;
   self.SUPPORTED_LANGUAGES = SUPPORTED_LANGUAGES;
   self.CONTEXT_MENU_ID = CONTEXT_MENU_ID;
+  self.CONTENT_SCRIPT_FILES = CONTENT_SCRIPT_FILES;
 }

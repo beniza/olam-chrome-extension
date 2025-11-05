@@ -7,6 +7,7 @@
 'use strict';
 
 // Import shared utilities
+importScripts('utils/constants.js');
 importScripts('utils/detectLanguage.js');
 importScripts('utils/constants.js');
 importScripts('utils/urlBuilder.js');
@@ -165,7 +166,7 @@ const ContextMenuService = {
         console.log('Content script not loaded, injecting...');
         await chrome.scripting.executeScript({
           target: { tabId: tab.id },
-          files: ['utils/constants.js', 'utils/detectLanguage.js', 'utils/urlBuilder.js', 'content.js']
+          files: CONTENT_SCRIPT_FILES
         });
         
         // Inject CSS
