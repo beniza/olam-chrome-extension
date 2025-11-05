@@ -138,6 +138,7 @@ chrome-plugin/
 │   ├── icon48.png            # 48×48 extension icon
 │   └── icon128.png           # 128×128 store icon
 ├── docs/                      # Documentation
+│   ├── project-architecture.md # System architecture (2100+ lines)
 │   ├── TESTING_CHECKLIST.md  # Comprehensive testing guide
 │   ├── failing-cases.md      # API inconsistencies report
 │   └── TESTING.md            # Testing documentation
@@ -480,12 +481,17 @@ We conducted extensive testing with **21 real API calls** to validate behavior a
 
 #### Testing Documentation
 
-Comprehensive test results and analysis available in `.local/` directory:
+Comprehensive test results and analysis available:
+
+**In `docs/` directory:**
+- **[`project-architecture.md`](docs/project-architecture.md)**: System architecture & data flows (2100+ lines)
+- **[`failing-cases.md`](docs/failing-cases.md)**: API limitations report for Olam.in developers
+
+**In `.local/` directory (gitignored):**
 - **`api-test-results.json`**: Raw API responses from 21 tests
 - **`api-analysis-report.md`**: Automated corner case categorization
 - **`corner-cases-analysis.md`**: Detailed validation (7KB)
 - **`EXTENDED_TESTING_SUMMARY.md`**: Complete testing report
-- **`project-architecture.md`**: System architecture & data flows
 
 **Result**: ✅ All corner cases properly handled. No code changes needed.
 
