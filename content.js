@@ -629,7 +629,7 @@ const Renderer = {
     const linkDiv = document.createElement('div');
     linkDiv.className = 'olam-link';
     linkDiv.innerHTML = `
-      <a href="https://olam.in/dictionary/${AppState.currentFromLang}/${AppState.currentToLang}/${encodeURIComponent(AppState.currentSearchWord)}" target="_blank">
+      <a href="${DICTIONARY_BASE_URL}/${AppState.currentFromLang}/${AppState.currentToLang}/${encodeURIComponent(AppState.currentSearchWord)}" target="_blank">
         View full details →
       </a>
     `;

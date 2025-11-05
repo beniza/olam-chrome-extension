@@ -4,10 +4,10 @@
  */
 
 const { setupChromeMock, createMockOlamResponse } = require('../mocks/chrome-api');
+const { API_BASE_URL } = require('../../utils/constants');
 
 describe('OlamAPI Service', () => {
   let OlamAPI;
-  const API_BASE_URL = 'https://olam.in/api/dictionary';
   
   beforeEach(() => {
     setupChromeMock();

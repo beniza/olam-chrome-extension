@@ -8,15 +8,7 @@
 
 // Import shared utilities
 importScripts('utils/detectLanguage.js');
-
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-const API_BASE_URL = 'https://olam.in/api/dictionary';
-const CONTEXT_MENU_ID = 'searchOlam';
-const DEFAULT_FROM_LANG = 'auto';
-const DEFAULT_TO_LANG = 'malayalam';
+importScripts('utils/constants.js');
 
 // =============================================================================
 // API SERVICE

@@ -4,11 +4,10 @@
  */
 
 const { setupChromeMock } = require('../mocks/chrome-api');
+const { DEFAULT_FROM_LANG, DEFAULT_TO_LANG } = require('../../utils/constants');
 
 describe('SettingsService', () => {
   let SettingsService;
-  const DEFAULT_FROM_LANG = 'auto';
-  const DEFAULT_TO_LANG = 'malayalam';
   
   beforeEach(() => {
     setupChromeMock();
