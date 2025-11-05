@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
   searchInput.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
       e.preventDefault();
+      // Ensure we capture the current value at the moment Enter is pressed
       performSearch();
     }
   });
@@ -61,7 +62,10 @@ document.addEventListener("DOMContentLoaded", function() {
   function loadLastSearch() {
     chrome.storage.local.get("lastSearch", (result) => {
       if (result.lastSearch && result.lastSearch.result) {
-        searchInput.value = result.lastSearch.query;
+        // Only populate input if it's currently empty
+        if (!searchInput.value) {
+          searchInput.value = result.lastSearch.query;
+        }
         currentData = result.lastSearch.result;
         initializeState(currentData);
         displayCurrentEntry();
@@ -72,6 +76,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // Perform search
   async function performSearch() {
     const searchText = searchInput.value.trim();
+    
+    console.log("Search input value at search time:", searchInput.value);
+    console.log("Trimmed search text:", searchText);
     
     if (!searchText) {
       console.log("No search text provided");
