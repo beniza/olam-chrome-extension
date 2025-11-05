@@ -330,6 +330,41 @@ html, body {
   font-size: 14px;
 }
 
+.olam-no-results p:first-child {
+  margin-bottom: 0;
+}
+
+.olam-no-results-hint {
+  font-size: 0.9em !important;
+  color: #64748b !important;
+  margin-top: 8px !important;
+  line-height: 1.4;
+}
+
+.olam-no-results-hint strong {
+  color: #475569;
+  font-weight: 600;
+}
+
+.olam-no-results-settings {
+  font-size: 0.85em !important;
+  margin-top: 12px !important;
+}
+
+.olam-no-results-settings a {
+  color: #3b82f6!important;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.olam-no-results-settings a:hover {
+  color: #2563eb !important;
+  text-decoration: underline !important;
+}
+
 /* Error */
 .olam-error {
   padding: 12px;
