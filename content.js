@@ -226,7 +226,15 @@ const UI = {
   <div class="olam-results" id="olam-results"></div>
   
   <div class="olam-no-results" id="olam-no-results" style="display: none;">
-    <p>No results found</p>
+    <p><strong>No results found</strong></p>
+    <p class="olam-no-results-hint" style="font-size: 0.9em; color: #64748b; margin-top: 12px; line-height: 1.5;">
+      Your current language setting:<br>
+      <strong style="color: #475569;">Source: <span id="olam-current-from-lang"></span></strong><br>
+      <strong style="color: #475569;">Target: <span id="olam-current-to-lang"></span></strong>
+    </p>
+    <p class="olam-no-results-settings" style="font-size: 0.85em; margin-top: 12px;">
+      <a href="#" id="olam-change-settings" style="color: #3b82f6; text-decoration: none; cursor: pointer;">⚙️ Click here to change settings</a>
+    </p>
   </div>
 </div>`;
   },
@@ -458,6 +466,35 @@ const UI = {
     const noResultsEl = AppState.popup.querySelector('#olam-no-results');
     
     resultsEl.innerHTML = '';
+    
+    // Update language information
+    const fromLangEl = noResultsEl.querySelector('#olam-current-from-lang');
+    const toLangEl = noResultsEl.querySelector('#olam-current-to-lang');
+    
+    if (fromLangEl && toLangEl) {
+      const fromLangText = AppState.currentFromLang === 'auto' ? 'Auto-detect' : 
+                          AppState.currentFromLang === 'english' ? 'English' : 'Malayalam';
+      const toLangText = AppState.currentToLang === 'malayalam' ? 'Malayalam' : 'English';
+      
+      fromLangEl.textContent = fromLangText;
+      toLangEl.textContent = toLangText;
+    }
+    
+    // Add settings link handler (one-time setup)
+    const settingsLink = noResultsEl.querySelector('#olam-change-settings');
+    if (settingsLink && !settingsLink.hasAttribute('data-listener-added')) {
+      settingsLink.setAttribute('data-listener-added', 'true');
+      settingsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Open options page via background script
+        chrome.runtime.sendMessage({ action: 'openOptions' }, () => {
+          // Close popup after opening settings
+          UI.hidePopup();
+        });
+      });
+    }
+    
     noResultsEl.style.display = 'block';
   },
   

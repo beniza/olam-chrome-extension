@@ -218,6 +218,7 @@ const MessageHandler = {
           
         case 'openOptions':
           this.handleOpenOptions();
+          sendResponse({ success: true });
           return false;
           
         default:
