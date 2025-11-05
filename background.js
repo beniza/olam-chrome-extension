@@ -9,7 +9,6 @@
 // Import shared utilities
 importScripts('utils/constants.js');
 importScripts('utils/detectLanguage.js');
-importScripts('utils/constants.js');
 importScripts('utils/urlBuilder.js');
 
 // =============================================================================
