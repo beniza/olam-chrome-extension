@@ -29,14 +29,17 @@
     "testEnvironment": "jsdom",
     "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
     "collectCoverageFrom": [
+      "utils/**/*.js",
+      "services/**/*.js",
+      "!**/*.test.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/",
       "content.js",
       "background.js",
       "options.js",
       "popup.js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/tests/"
     ],
     "testMatch": [
       "**/tests/**/*.test.js"
