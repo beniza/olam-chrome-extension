@@ -56,7 +56,7 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
    - Double-click any English or Malayalam word
    - Enjoy instant translations!
 
-📚 **Detailed installation and testing guide**: See [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+📚 **Detailed installation and testing guide**: See [docs/TESTING_CHECKLIST.md](docs/TESTING_CHECKLIST.md)
 
 ### For Developers
 
@@ -132,15 +132,17 @@ chrome-plugin/
 ├── options.html               # Settings page
 ├── options.js                 # Settings management
 ├── styles.css                 # All styling (623 lines)
+├── README.md                  # This file
 ├── icons/                     # Extension icons
 │   ├── icon16.png            # 16×16 toolbar icon
 │   ├── icon48.png            # 48×48 extension icon
 │   └── icon128.png           # 128×128 store icon
-├── README.md                  # This file
-├── TESTING_CHECKLIST.md       # Comprehensive testing guide
-├── REFACTORING.md            # Architecture documentation
-├── CODE_REVIEW.md            # Code review notes
-├── IMPLEMENTATION.md         # Implementation details
+├── docs/                      # Documentation
+│   ├── TESTING_CHECKLIST.md  # Comprehensive testing guide
+│   ├── failing-cases.md      # API inconsistencies report
+│   └── TESTING.md            # Testing documentation
+├── tests/                     # Test suite (100 tests)
+├── utils/                     # Utility modules
 └── plugin-description.json    # Extension metadata
 ```
 
@@ -261,7 +263,7 @@ npm run test:coverage
 
 Comprehensive testing checklist available for quality assurance:
 
-- **Manual Testing**: [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+- **Manual Testing**: [docs/TESTING_CHECKLIST.md](docs/TESTING_CHECKLIST.md)
   - 16 test categories
   - Step-by-step instructions
   - Expected results for each test
@@ -346,7 +348,7 @@ npm run test:integration
 2. Make your changes following the modular structure
 3. Write or update tests for your changes
 4. Run `npm test` to ensure all tests pass
-5. Test manually using [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+5. Test manually using [docs/TESTING_CHECKLIST.md](docs/TESTING_CHECKLIST.md)
 6. Document changes in commit messages
 7. Submit pull request
 
@@ -364,7 +366,7 @@ npm run test:integration
 - 🐛 Fixed template string syntax issues
 - 🐛 Fixed context menu search with proper language handling
 - 🐛 Fixed page layout interference
-- 📚 Added extensive documentation (REFACTORING.md, TESTING_CHECKLIST.md)
+- 📚 Added extensive documentation (REFACTORING.md, docs/TESTING_CHECKLIST.md)
 
 ### v1.0.1
 - 🐛 Fixed page layout shrinkage issue
@@ -489,7 +491,7 @@ Comprehensive test results and analysis available in `.local/` directory:
 
 ### API Limitations & Known Issues
 
-See [failing-cases.md](failing-cases.md) for documented API limitations that have been reported to Olam.in developers.
+See [docs/failing-cases.md](docs/failing-cases.md) for documented API limitations that have been reported to Olam.in developers.
 
 ---
 
@@ -507,13 +509,13 @@ See [failing-cases.md](failing-cases.md) for documented API limitations that hav
 ## 📞 Support
 
 ### Getting Help
-- 📖 **Documentation**: Read [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md) for detailed guides
+- 📖 **Documentation**: Read [docs/TESTING_CHECKLIST.md](docs/TESTING_CHECKLIST.md) for detailed guides
 - 🐛 **Bug Reports**: Open an issue with reproduction steps
 - 💡 **Feature Requests**: Suggest improvements via issues
 - 📧 **Contact**: Reach out through the repository
 
 ### Troubleshooting
-See the [Troubleshooting section](TESTING_CHECKLIST.md#-troubleshooting) in the testing checklist for common issues and solutions.
+See the [Troubleshooting section](docs/TESTING_CHECKLIST.md#-troubleshooting) in the testing checklist for common issues and solutions.
 
 ---
 
@@ -531,4 +533,5 @@ If you find this extension useful:
 **Made with ❤️ for the Malayalam language community**
 
 *Last updated: November 2025*
+
 
