@@ -426,13 +426,13 @@ This section validates that the recent code refactoring maintains functionality.
 **Expected Result:** ✅ URLs are correctly constructed with proper encoding
 
 #### 11C: Constants Configuration
-- [ ] 1. Open browser console (F12)
-- [ ] 2. Type: `API_BASE_URL` and press Enter
-- [ ] 3. Should output: `"https://olam.in/api/dictionary"`
-- [ ] 4. Type: `DICTIONARY_BASE_URL` and press Enter
-- [ ] 5. Should output: `"https://olam.in/dictionary"`
-- [ ] 6. Type: `DEFAULT_TO_LANG` and press Enter
-- [ ] 7. Should output: `"malayalam"`
+- [x] 1. Open browser console (F12)
+- [x] 2. Type: `API_BASE_URL` and press Enter
+- [x] 3. Should output: `"https://olam.in/api/dictionary"`
+- [x] 4. Type: `DICTIONARY_BASE_URL` and press Enter
+- [x] 5. Should output: `"https://olam.in/dictionary"`
+- [x] 6. Type: `DEFAULT_TO_LANG` and press Enter
+- [x] 7. Should output: `"malayalam"`
 
 **Expected Result:** ✅ Constants are globally available and correctly set
 

@@ -160,6 +160,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const allBtn = document.createElement("button");
     allBtn.className = "source-filter active";
     allBtn.textContent = "All Sources";
+    allBtn.dataset.source = null;
     allBtn.addEventListener("click", function() {
       appState.setSourceFilter(null);
       updateActiveFilter(allBtn);
@@ -171,7 +172,19 @@ document.addEventListener("DOMContentLoaded", function() {
     sources.forEach(source => {
       const btn = document.createElement("button");
       btn.className = "source-filter";
-      btn.textContent = source;
+      btn.dataset.source = source;
+      
+      // Add special styling classes
+      if (source === 'src:ekkurup') {
+        btn.classList.add('tag-ekkurup');
+        btn.textContent = "E. K. Kurup";
+      } else if (source === 'src:crowd') {
+        btn.classList.add('tag-crowd');
+        btn.textContent = "Crowd Sourced";
+      } else {
+        btn.textContent = source.replace('src:', '');
+      }
+      
       btn.addEventListener("click", function() {
         appState.setSourceFilter(source);
         updateActiveFilter(btn);
@@ -184,7 +197,12 @@ document.addEventListener("DOMContentLoaded", function() {
   // Update active filter button
   function updateActiveFilter(activeBtn) {
     const buttons = sourceFiltersDiv.querySelectorAll(".source-filter");
-    buttons.forEach(btn => btn.classList.remove("active"));
+    buttons.forEach(btn => {
+      btn.classList.remove("active", "inactive");
+      if (btn !== activeBtn) {
+        btn.classList.add("inactive");
+      }
+    });
     activeBtn.classList.add("active");
   }
 
