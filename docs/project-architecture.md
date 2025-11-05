@@ -2072,24 +2072,36 @@ Comprehensive API testing was conducted with 10 test scenarios covering:
 ### Identified Corner Cases
 
 1. **Empty Results**: Words not found (e.g., "xyzabc", "hello world")
-   - Handler: Shows "No results found" message
-   - Code: `popup.js` lines 67-81, `content.js` lines 457-462
+   - Handler: Shows "No results found" message with language settings reminder
+   - Feature: Displays current Source/Target language settings
+   - Action: Clickable link to open settings page
+   - Code: `content.js` lines 460-495
 
-2. **Pagination**: Large result sets split into pages
+2. **Wrong Language Setting**: Searching with incorrect source language
+   - Handler: No results message shows current settings (e.g., "Source: Malayalam")
+   - UX: Helps users understand why search failed
+   - Action: Direct link to change settings without leaving current page
+
+3. **Page Zoom**: User zooms in/out while popup is visible
+   - Handler: Popup automatically repositions within viewport bounds
+   - Code: Visual viewport API with resize listeners
+   - Prevents: Popup going off-screen or title bar disappearing
+
+4. **Pagination**: Large result sets split into pages
    - Handler: Shows first 10 entries (by design)
    - Navigation: User can browse with ← → buttons
    - Code: `content.js` lines 68-92
 
-3. **Large Content Arrays**: 50+ translation words per relation
+5. **Large Content Arrays**: 50+ translation words per relation
    - Handler: Result limit feature (default: 50 words)
    - User control: Settings allow 10/20/50/all
    - Code: `content.js` lines 586-605
 
-4. **Special Characters**: Queries like "test!@#"
+6. **Special Characters**: Queries like "test!@#"
    - Handler: URL encoding + API gracefully ignores
    - Code: `utils/urlBuilder.js`
 
-5. **Multi-Word Phrases**: Queries like "hello world"
+7. **Multi-Word Phrases**: Queries like "hello world"
    - Handler: Same as empty results (Olam is word-based)
    - Code: Same as corner case #1
 

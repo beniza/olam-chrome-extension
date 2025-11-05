@@ -24,9 +24,11 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 - 📑 **Multiple Entries Navigation**: Browse through different dictionary entries with prev/next buttons
 - 🏷️ **Source Filtering**: Filter results by dictionary source (E.K. Kurup, Crowd Sourced)
 - ⚙️ **Customizable Settings**: Configure double-click, language preferences, and result limits
+- 💡 **Smart No-Results Message**: Shows current language settings and quick link to change them when no results found
 - 🎨 **Clean UI**: Beautiful design matching Olam.in's aesthetic
 - ⚡ **Fast & Responsive**: Results appear in under 1 second
 - 🛡️ **Layout Protection**: Doesn't interfere with page layout or content
+- 🔍 **Zoom Support**: Popup repositions automatically when page is zoomed in/out
 
 ### User Settings
 - **Double-Click Toggle**: Enable/disable double-click functionality
@@ -473,13 +475,15 @@ We conducted extensive testing with **21 real API calls** to validate behavior a
 
 | # | Corner Case | Status | Handling |
 |---|-------------|--------|----------|
-| 1 | Empty results (non-existent words) | ✅ Validated | Shows "No results found" |
-| 2 | Pagination (222+ entries) | ✅ Validated | First 10 entries with navigation |
-| 3 | Large content arrays (60+ words) | ✅ Validated | Result limit feature (default: 50) |
-| 4 | Special characters | ✅ Validated | URL-encoded, API ignores them |
-| 5 | Multi-word English phrases | ✅ Validated | Returns empty (API limitation) |
-| 6 | Multi-word Malayalam phrases | ✅ Validated | Returns empty (API limitation) |
-| 7 | Mixed language queries | ✅ Validated | Returns empty (API limitation) |
+| 1 | Empty results (non-existent words) | ✅ Validated | Shows "No results found" with language settings reminder |
+| 2 | Wrong language setting | ✅ Handled | Shows current settings and link to change them |
+| 3 | Pagination (222+ entries) | ✅ Validated | First 10 entries with navigation |
+| 4 | Large content arrays (60+ words) | ✅ Validated | Result limit feature (default: 50) |
+| 5 | Special characters | ✅ Validated | URL-encoded, API ignores them |
+| 6 | Multi-word English phrases | ✅ Validated | Returns empty (API limitation) |
+| 7 | Multi-word Malayalam phrases | ✅ Validated | Returns empty (API limitation) |
+| 8 | Mixed language queries | ✅ Validated | Returns empty (API limitation) |
+| 9 | Page zoom in/out | ✅ Handled | Popup repositions automatically |
 
 #### Testing Documentation
 
