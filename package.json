@@ -1,6 +1,6 @@
 {
   "name": "olam-chrome-extension",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Chrome extension for English-Malayalam dictionary lookups using Olam.in",
   "scripts": {
     "test": "jest",
@@ -29,14 +29,17 @@
     "testEnvironment": "jsdom",
     "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
     "collectCoverageFrom": [
+      "utils/**/*.js",
+      "services/**/*.js",
+      "!**/*.test.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/",
       "content.js",
       "background.js",
       "options.js",
       "popup.js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/tests/"
     ],
     "testMatch": [
       "**/tests/**/*.test.js"

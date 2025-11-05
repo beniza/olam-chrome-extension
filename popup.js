@@ -1,31 +1,75 @@
-// Popup script for Olam Dictionary extension
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-  const resultsDiv = document.getElementById('results');
-  const loadingDiv = document.getElementById('loading');
-  const noResultsDiv = document.getElementById('noResults');
-  const languageRadios = document.querySelectorAll('input[name="fromLang"]');
+﻿// Popup script for Olam Dictionary extension
+document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const settingsBtn = document.getElementById("settingsBtn");
+  const resultsDiv = document.getElementById("results");
+  const loadingDiv = document.getElementById("loading");
+  const noResultsDiv = document.getElementById("noResults");
+  const navigationControls = document.getElementById("navigationControls");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const entryCounter = document.getElementById("entryCounter");
+  const sourceFiltersDiv = document.getElementById("sourceFilters");
+  const changeSettingsLink = document.getElementById("changeSettings");
+
+  // State management
+  let currentData = null;
+  let appState = null;
 
   // Load last search on popup open
   loadLastSearch();
 
-  // Search button click
-  searchBtn.addEventListener('click', performSearch);
+  // Settings button click
+  settingsBtn.addEventListener("click", function() {
+    chrome.runtime.openOptionsPage();
+  });
 
-  // Enter key in search input
-  searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
+  // Change settings link
+  changeSettingsLink.addEventListener("click", function(e) {
+    e.preventDefault();
+    chrome.runtime.openOptionsPage();
+  });
+
+  // Search button click
+  searchBtn.addEventListener("click", performSearch);
+
+  // Enter key in search input (using keydown for better compatibility)
+  searchInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // Ensure we capture the current value at the moment Enter is pressed
       performSearch();
+    }
+  });
+
+  // Navigation buttons
+  prevBtn.addEventListener("click", function() {
+    if (appState) {
+      appState.previousEntry();
+      displayCurrentEntry();
+    }
+  });
+
+  nextBtn.addEventListener("click", function() {
+    if (appState) {
+      appState.nextEntry();
+      displayCurrentEntry();
     }
   });
 
   // Load last search from storage
   function loadLastSearch() {
-    chrome.runtime.sendMessage({ action: 'getLastSearch' }, (lastSearch) => {
-      if (lastSearch && lastSearch.result) {
-        searchInput.value = lastSearch.query;
-        displayResults(lastSearch.result);
+    chrome.storage.local.get("lastSearch", (result) => {
+      if (result.lastSearch && result.lastSearch.result) {
+        // Only populate input if it's currently empty
+        if (!searchInput.value) {
+          searchInput.value = result.lastSearch.query;
+        }
+        currentData = result.lastSearch.result;
+        initializeState(currentData, () => {
+          displayCurrentEntry();
+        });
       }
     });
   }
@@ -35,38 +79,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchText = searchInput.value.trim();
     
     if (!searchText) {
-      console.log('No search text provided');
       return;
     }
 
-    console.log('Performing search for:', searchText);
-
     // Show loading
-    loadingDiv.style.display = 'flex';
-    resultsDiv.innerHTML = '';
-    noResultsDiv.style.display = 'none';
+    loadingDiv.style.display = "flex";
+    resultsDiv.innerHTML = "";
+    noResultsDiv.style.display = "none";
+    navigationControls.style.display = "none";
+    sourceFiltersDiv.style.display = "none";
 
     // Get selected language
-    const fromLang = document.querySelector('input[name="fromLang"]:checked').value;
+    const fromLang = document.querySelector("input[name=\"fromLang\"]:checked").value;
     const toLang = DEFAULT_TO_LANG;
-
-    console.log('Language direction:', fromLang, '→', toLang);
 
     try {
       const apiUrl = buildApiUrl(fromLang, toLang, searchText);
-      console.log('API URL:', apiUrl);
       
       const response = await fetch(apiUrl);
-      console.log('Response status:', response.status);
       
       const data = await response.json();
-      console.log('Response data:', data);
 
-      loadingDiv.style.display = 'none';
+      loadingDiv.style.display = "none";
 
       if (data.data && data.data.entries && data.data.entries.length > 0) {
-        console.log('Found', data.data.entries.length, 'entries');
-        displayResults(data);
+        currentData = data;
+        initializeState(data, () => {
+          displayCurrentEntry();
+        });
         
         // Save to storage
         chrome.storage.local.set({
@@ -77,101 +117,207 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       } else {
-        console.log('No results found');
-        noResultsDiv.style.display = 'block';
+        showNoResults(fromLang, toLang);
       }
     } catch (error) {
-      console.error('Error searching:', error);
-      loadingDiv.style.display = 'none';
-      resultsDiv.innerHTML = '<div class="error">Error fetching results. Please try again.</div>';
+      console.error("Error searching:", error);
+      loadingDiv.style.display = "none";
+      resultsDiv.innerHTML = "<div class=\"error\">Error fetching results. Please try again.</div>";
     }
   }
 
-  // Display search results
-  function displayResults(data) {
-    resultsDiv.innerHTML = '';
+  // Initialize app state
+  function initializeState(data, callback) {
+    // Get word limit from settings (default is 3)
+    chrome.storage.sync.get(["wordLimit"], (result) => {
+      const wordLimit = result.wordLimit !== undefined ? result.wordLimit : 3;
+      
+      appState = new AppState({
+        entries: data.data.entries,
+        maxWords: wordLimit === -1 ? Infinity : wordLimit,
+        query: data.data.query
+      });
 
-    if (!data.data || !data.data.entries || data.data.entries.length === 0) {
-      noResultsDiv.style.display = 'block';
+      // Build source filters if multiple sources exist
+      const sources = appState.getAvailableSources();
+      if (sources.length > 1) {
+        buildSourceFilters(sources);
+      } else {
+        sourceFiltersDiv.style.display = "none";
+      }
+      
+      // Call callback after state is initialized
+      if (callback) callback();
+    });
+  }
+
+  // Build source filter buttons
+  function buildSourceFilters(sources) {
+    sourceFiltersDiv.innerHTML = "";
+    sourceFiltersDiv.style.display = "flex";
+
+    // "All Sources" button
+    const allBtn = document.createElement("button");
+    allBtn.className = "source-filter active";
+    allBtn.textContent = "All Sources";
+    allBtn.dataset.source = "all";
+    allBtn.addEventListener("click", function() {
+      if (!allBtn.classList.contains('active')) {
+        appState.setSourceFilter(null);
+        updateActiveFilter(allBtn);
+        displayCurrentEntry();
+      }
+    });
+    sourceFiltersDiv.appendChild(allBtn);
+
+    // Individual source buttons
+    sources.forEach(source => {
+      const btn = document.createElement("button");
+      btn.className = "source-filter";
+      btn.dataset.source = source;
+      
+      // Add special styling classes
+      if (source === 'src:ekkurup') {
+        btn.classList.add('tag-ekkurup');
+        btn.textContent = "E. K. Kurup";
+      } else if (source === 'src:crowd') {
+        btn.classList.add('tag-crowd');
+        btn.textContent = "Crowd Sourced";
+      } else {
+        btn.textContent = source.replace('src:', '');
+      }
+      
+      btn.addEventListener("click", function() {
+        // Toggle: if clicking active button, go back to "All"
+        if (btn.classList.contains('active')) {
+          appState.setSourceFilter(null);
+          updateActiveFilter(allBtn);
+        } else {
+          appState.setSourceFilter(source);
+          updateActiveFilter(btn);
+        }
+        displayCurrentEntry();
+      });
+      sourceFiltersDiv.appendChild(btn);
+    });
+  }
+
+  // Update active filter button
+  function updateActiveFilter(activeBtn) {
+    const buttons = sourceFiltersDiv.querySelectorAll(".source-filter");
+    const isAllButton = activeBtn.dataset.source === "all";
+    
+    buttons.forEach(btn => {
+      btn.classList.remove("active", "inactive");
+      if (btn !== activeBtn) {
+        // Only add inactive class if "All" is not selected
+        if (!isAllButton) {
+          btn.classList.add("inactive");
+        }
+      }
+    });
+    activeBtn.classList.add("active");
+  }
+
+  // Display current entry
+  function displayCurrentEntry() {
+    if (!appState) return;
+
+    const entry = appState.getCurrentEntry();
+    if (!entry) {
+      noResultsDiv.style.display = "block";
+      resultsDiv.innerHTML = "";
+      navigationControls.style.display = "none";
       return;
     }
 
-    // Get the query info for the link
-    const query = data.data.query;
-    const searchWord = query.q;
-    const fromLang = query.from_lang;
-    const toLang = query.to_lang;
+    noResultsDiv.style.display = "none";
+    resultsDiv.innerHTML = "";
 
-    data.data.entries.forEach((entry, index) => {
-      const entryDiv = document.createElement('div');
-      entryDiv.className = 'entry';
+    // Show navigation if multiple entries
+    const totalEntries = appState.getFilteredEntriesCount();
+    if (totalEntries > 1) {
+      navigationControls.style.display = "flex";
+      entryCounter.textContent = (appState.getCurrentIndex() + 1) + "/" + totalEntries;
+      prevBtn.disabled = !appState.hasPrevious();
+      nextBtn.disabled = !appState.hasNext();
+    } else {
+      navigationControls.style.display = "none";
+    }
 
-      // Word header
-      const wordHeader = document.createElement('div');
-      wordHeader.className = 'word-header';
-      wordHeader.innerHTML = `<h2>${entry.content.join(', ')}</h2>`;
-      entryDiv.appendChild(wordHeader);
+    // Create entry element
+    const entryDiv = document.createElement("div");
+    entryDiv.className = "entry";
 
-      // Relations (translations)
-      if (entry.relations && entry.relations.length > 0) {
-        // Limit to first relation only for preview
-        const relation = entry.relations[0];
-        
-        const relationDiv = document.createElement('div');
-        relationDiv.className = 'relation';
+    // Word header
+    const wordHeader = document.createElement("div");
+    wordHeader.className = "word-header";
+    wordHeader.innerHTML = "<h2>" + entry.content.join(", ") + "</h2>";
+    entryDiv.appendChild(wordHeader);
 
-        // Meaning - limit to first 3 words
-        const meaningDiv = document.createElement('div');
-        meaningDiv.className = 'meaning';
-        const words = relation.content.slice(0, 3); // Take first 3 words
-        meaningDiv.textContent = words.join(', ');
-        if (relation.content.length > 3) {
-          meaningDiv.textContent += '...';
+    // Relations (translations)
+    if (entry.relations && entry.relations.length > 0) {
+      entry.relations.forEach(relation => {
+        const relationDiv = document.createElement("div");
+        relationDiv.className = "relation";
+
+        // Meaning - with word limit
+        const meaningDiv = document.createElement("div");
+        meaningDiv.className = "meaning";
+        const displayWords = appState.limitWords(relation.content);
+        meaningDiv.textContent = displayWords.join(", ");
+        if (displayWords.length < relation.content.length) {
+          meaningDiv.textContent += "...";
         }
         relationDiv.appendChild(meaningDiv);
 
         // Type (noun, verb, etc.)
         if (relation.relation && relation.relation.types) {
-          const typeDiv = document.createElement('div');
-          typeDiv.className = 'type';
-          typeDiv.textContent = relation.relation.types.join(', ');
+          const typeDiv = document.createElement("div");
+          typeDiv.className = "type";
+          typeDiv.textContent = relation.relation.types.join(", ");
           relationDiv.appendChild(typeDiv);
         }
 
         entryDiv.appendChild(relationDiv);
+      });
+    }
 
-        // Show count if there are more relations
-        if (entry.relations.length > 1) {
-          const moreDiv = document.createElement('div');
-          moreDiv.className = 'more-info';
-          moreDiv.textContent = `+${entry.relations.length - 1} more meanings`;
-          entryDiv.appendChild(moreDiv);
-        }
-      }
-
-      resultsDiv.appendChild(entryDiv);
-    });
+    resultsDiv.appendChild(entryDiv);
 
     // Add "View Full Details" link
-    const linkDiv = document.createElement('div');
-    linkDiv.className = 'full-link';
-    linkDiv.innerHTML = `
-      <a href="${buildDictionaryUrl(fromLang, toLang, searchWord)}" target="_blank">
-        View full details on olam.in →
-      </a>
-    `;
+    const query = appState.query;
+    const linkDiv = document.createElement("div");
+    linkDiv.className = "full-link";
+    linkDiv.innerHTML = "<a href=\"" + buildDictionaryUrl(query.from_lang, query.to_lang, query.q) + "\" target=\"_blank\" rel=\"noopener noreferrer\">View full details on olam.in <span aria-label=\"opens in new tab\">(↗)</span></a>";
     resultsDiv.appendChild(linkDiv);
   }
 
+  // Show no results message
+  function showNoResults(fromLang, toLang) {
+    noResultsDiv.style.display = "block";
+    resultsDiv.innerHTML = "";
+    navigationControls.style.display = "none";
+    sourceFiltersDiv.style.display = "none";
+
+    // Display current language settings
+    const fromLangName = fromLang === "auto" ? "Auto-detect" : 
+                         fromLang.charAt(0).toUpperCase() + fromLang.slice(1);
+    const toLangName = toLang.charAt(0).toUpperCase() + toLang.slice(1);
+    
+    document.getElementById("currentFromLang").textContent = fromLangName;
+    document.getElementById("currentToLang").textContent = toLangName;
+  }
+
   // Auto-detect language based on input
-  searchInput.addEventListener('input', function() {
+  searchInput.addEventListener("input", function() {
     const text = searchInput.value;
     const isMalayalam = /[\u0D00-\u0D7F]/.test(text);
     
     if (isMalayalam) {
-      document.querySelector('input[value="malayalam"]').checked = true;
+      document.querySelector("input[value=\"malayalam\"]").checked = true;
     } else if (text.trim()) {
-      document.querySelector('input[value="english"]').checked = true;
+      document.querySelector("input[value=\"english\"]").checked = true;
     }
   });
 });

@@ -217,25 +217,25 @@ Test all three methods:
 #### 6C: Language Preferences
 - [x] 1. In Settings, find "Language Preferences"
 - [x] 2. **Search from:** dropdown shows "Auto-detect" (default)
-- [ ] 3. Change it to "Malayalam"
+- [x] 3. Change it to "Malayalam"
 - [ ] 4. **Translate to:** change to "English"
-- [ ] 5. Settings save automatically (green "Settings saved!" message appears)
-- [ ] 6. Use context menu (right-click) to search a Malayalam word
-- [ ] 7. Results use the selected language preferences
+- [x] 5. Settings save automatically (green "Settings saved!" message appears)
+- [x] 6. Use context menu (right-click) to search a Malayalam word
+- [x] 7. Results use the selected language preferences
 
 **Note:** Double-click search always auto-detects language regardless of this setting.
 
 **Expected Result:** ✅ Language preferences work for context menu searches
 
 #### 6D: Result Limit
-- [ ] 1. In Settings, find "Number of words to display"
-- [ ] 2. Default is **"3 words"**
-- [ ] 3. Change to **"5 words"** → Settings save
-- [ ] 4. Search a word with many translations
-- [ ] 5. Verify 5 words are shown (instead of 3)
-- [ ] 6. Change to **"All words"**
-- [ ] 7. A warning message appears: "⚠️ Showing all words may make the popup very large"
-- [ ] 8. Search a word → all available translations are displayed
+- [x] 1. In Settings, find "Number of words to display"
+- [x] 2. Default is **"3 words"**
+- [x] 3. Change to **"5 words"** → Settings save
+- [x] 4. Search a word with many translations
+- [x] 5. Verify 5 words are shown (instead of 3)
+- [x] 6. Change to **"All words"**
+- [x] 7. A warning message appears: "⚠️ Showing all words may make the popup very large"
+- [x] 8. Search a word → all available translations are displayed
 
 **Expected Result:** ✅ Result limit setting controls how many words are shown
 
@@ -244,33 +244,33 @@ Test all three methods:
 ### Part 7: Special Features
 
 #### 7A: View Full Details Link
-- [ ] 1. Open any search result
+- [x] 1. Open any search result
 - [ ] 2. Click the **"View full details →"** link at the bottom
-- [ ] 3. Opens https://olam.in website in a new tab
-- [ ] 4. Shows the complete dictionary entry with all details
+- [x] 3. Opens https://olam.in website in a new tab
+- [x] 4. Shows the complete dictionary entry with all details
 
 **Expected Result:** ✅ Link opens the full dictionary page on Olam.in
 
 #### 7B: No Results Handling
-- [ ] 1. Search a nonsense word (e.g., "xyzabc123")
-- [ ] 2. Popup shows "No results found" message
-- [ ] 3. Message displays "Your current language setting:"
-- [ ] 4. Shows "Source: [Language]" and "Target: [Language]"
-- [ ] 5. Shows clickable link "⚙️ Click here to change settings"
-- [ ] 6. Click the settings link
-- [ ] 7. Options page opens in new tab
-- [ ] 8. Popup closes automatically
+- [x] 1. Search a nonsense word (e.g., "xyzabc123")
+- [x] 2. Popup shows "No results found" message
+- [x] 3. Message displays "Your current language setting:"
+- [x] 4. Shows "Source: [Language]" and "Target: [Language]"
+- [x] 5. Shows clickable link "⚙️ Click here to change settings"
+- [x] 6. Click the settings link
+- [x] 7. Options page opens in new tab
+- [x] 8. Popup closes automatically
 
 **Expected Result:** ✅ Gracefully handles words not in dictionary with helpful language settings reminder
 
 #### 7C: Wrong Language Setting
-- [ ] 1. Open options page (⚙️ icon in popup or extension settings)
-- [ ] 2. Set "Source Language" to "Malayalam"
-- [ ] 3. Save settings
-- [ ] 4. Search an English word (e.g., "hello")
-- [ ] 5. No results message shows "Source: Malayalam"
-- [ ] 6. User can immediately see why search failed
-- [ ] 7. Click settings link to change language
+- [x] 1. Open options page (⚙️ icon in popup or extension settings)
+- [x] 2. Set "Source Language" to "Malayalam"
+- [x] 3. Save settings
+- [x] 4. Search an English word (e.g., "hello")
+- [x] 5. No results message shows "Source: Malayalam"
+- [x] 6. User can immediately see why search failed
+- [x] 7. Click settings link to change language
 
 **Expected Result:** ✅ User understands language mismatch and can quickly fix it
 
@@ -282,23 +282,23 @@ Test all three methods:
 - Visit any website with text content
 
 #### 8A: Popup Position on Zoom
-- [ ] 1. Double-click a word to show popup
-- [ ] 2. Press Ctrl/Cmd + to zoom in (150%)
-- [ ] 3. Popup repositions automatically
-- [ ] 4. Popup stays within viewport bounds
-- [ ] 5. Press Ctrl/Cmd - to zoom out (75%)
-- [ ] 6. Popup repositions again
-- [ ] 7. Title bar remains visible
-- [ ] 8. All popup content accessible
+- [x] 1. Double-click a word to show popup
+- [x] 2. Press Ctrl/Cmd + to zoom in (150%)
+- [x] 3. Popup repositions automatically
+- [x] 4. Popup stays within viewport bounds
+- [x] 5. Press Ctrl/Cmd - to zoom out (75%)
+- [x] 6. Popup repositions again
+- [x] 7. Title bar remains visible
+- [x] 8. All popup content accessible
 
 **Expected Result:** ✅ Popup adapts to zoom level changes automatically
 
 #### 8B: Zoom Before Search
-- [ ] 1. Zoom page to 200% (Ctrl/Cmd +)
-- [ ] 2. Double-click a word
-- [ ] 3. Popup appears at correct position
-- [ ] 4. Popup doesn't go off-screen
-- [ ] 5. Reset zoom to 100% (Ctrl/Cmd 0)
+- [x] 1. Zoom page to 200% (Ctrl/Cmd +)
+- [x] 2. Double-click a word
+- [x] 3. Popup appears at correct position
+- [x] 4. Popup doesn't go off-screen
+- [x] 5. Reset zoom to 100% (Ctrl/Cmd 0)
 
 **Expected Result:** ✅ Popup positioning accounts for page zoom level
 
@@ -310,12 +310,12 @@ Test all three methods:
 - Visit any website with text content
 
 **Steps:**
-- [ ] 1. Note the current page layout (content position)
-- [ ] 2. Double-click a word to open the popup
-- [ ] 3. Check if the page content shifted or shrank
-- [ ] 4. Page content should remain in the same position
-- [ ] 5. Scroll the page up and down
-- [ ] 6. Popup position stays fixed relative to the viewport (doesn't scroll with page)
+- [x] 1. Note the current page layout (content position)
+- [x] 2. Double-click a word to open the popup
+- [x] 3. Check if the page content shifted or shrank
+- [x] 4. Page content should remain in the same position
+- [x] 5. Scroll the page up and down
+- [x] 6. Popup position stays fixed relative to the viewport (doesn't scroll with page)
 
 **Expected Result:** ✅ Page layout is not affected by the popup
 
@@ -324,19 +324,19 @@ Test all three methods:
 ### Part 10: Performance & Reliability
 
 #### 9A: Speed Test
-- [ ] 1. Double-click a word → results appear within **1 second**
-- [ ] 2. Navigate between entries → switching is **instant** (no delay)
-- [ ] 3. Switch filters → results update **instantly**
-- [ ] 4. Open and close popup 10 times → consistent fast performance
+- [x] 1. Double-click a word → results appear within **1 second**
+- [x] 2. Navigate between entries → switching is **instant** (no delay)
+- [x] 3. Switch filters → results update **instantly**
+- [x] 4. Open and close popup 10 times → consistent fast performance
 
 **Expected Result:** ✅ Extension is fast and responsive
 
 #### 9B: Console Errors Check
-- [ ] 1. Press **F12** to open Chrome DevTools
-- [ ] 2. Go to the **Console** tab
-- [ ] 3. Perform several searches (double-click, context menu)
-- [ ] 4. Check console for red error messages
-- [ ] 5. Only informational messages (if any) should appear
+- [x] 1. Press **F12** to open Chrome DevTools
+- [x] 2. Go to the **Console** tab
+- [x] 3. Perform several searches (double-click, context menu)
+- [x] 4. Check console for red error messages
+- [x] 5. Only informational messages (if any) should appear
 
 **Expected Result:** ✅ No JavaScript errors in console
 
@@ -349,52 +349,51 @@ Test all three methods:
 - npm (comes with Node.js)
 
 #### 10A: Initial Setup
-- [ ] 1. Open a terminal/command prompt in the extension folder
-- [ ] 2. Run `npm install` → Dependencies install successfully
-- [ ] 3. No error messages during installation
-- [ ] 4. Check that `node_modules` folder is created
+- [x] 1. Open a terminal/command prompt in the extension folder
+- [x] 2. Run `npm install` → Dependencies install successfully
+- [x] 3. No error messages during installation
+- [x] 4. Check that `node_modules` folder is created
 
 **Expected Result:** ✅ Dependencies install without errors
-
 #### 10B: Run Test Suite
-- [ ] 1. In terminal, run `npm test`
-- [ ] 2. Jest starts and runs all test suites
-- [ ] 3. Test results show:
+- [x] 1. In terminal, run `npm test`
+- [x] 2. Jest starts and runs all test suites
+- [x] 3. Test results show:
   - **Test Suites:** 7 passed, 7 total
   - **Tests:** 100 passed, 100 total
   - No failed or skipped tests
-- [ ] 4. All tests complete in under 5 seconds
-- [ ] 5. No red error messages appear
+- [x] 4. All tests complete in under 5 seconds
+- [x] 5. No red error messages appear
 
 **Expected Result:** ✅ All 100 tests pass successfully
 
 #### 10C: Individual Test Suites
 Verify each test suite passes:
-- [ ] **AppState Tests** (16 tests) - State management, configuration
-- [ ] **API Service Tests** (11 tests) - Content script API, language detection
-- [ ] **OlamAPI Tests** (17 tests) - Background API, caching, error handling
-- [ ] **Settings Service Tests** (7 tests) - Chrome storage, defaults
-- [ ] **URL Builder Tests** (19 tests) - URL construction, encoding
-- [ ] **Constants Tests** (27 tests) - Configuration values, exports
-- [ ] **Integration Tests** (3 tests) - End-to-end search flow
+- [x] **AppState Tests** (16 tests) - State management, configuration
+- [x] **API Service Tests** (11 tests) - Content script API, language detection
+- [x] **OlamAPI Tests** (17 tests) - Background API, caching, error handling
+- [x] **Settings Service Tests** (7 tests) - Chrome storage, defaults
+- [x] **URL Builder Tests** (19 tests) - URL construction, encoding
+- [x] **Constants Tests** (27 tests) - Configuration values, exports
+- [x] **Integration Tests** (3 tests) - End-to-end search flow
 
 **Expected Result:** ✅ Each test suite passes independently
 
 #### 10D: Test Watch Mode (Optional)
-- [ ] 1. Run `npm run test:watch`
-- [ ] 2. Jest starts in watch mode
-- [ ] 3. Make a small change to any `.js` file
-- [ ] 4. Tests automatically re-run
-- [ ] 5. Press `q` to quit watch mode
+- [x] 1. Run `npm run test:watch`
+- [x] 2. Jest starts in watch mode
+- [x] 3. Make a small change to any `.js` file
+- [x] 4. Tests automatically re-run
+- [x] 5. Press `q` to quit watch mode
 
 **Expected Result:** ✅ Watch mode detects changes and re-runs tests
 
 #### 10E: Test Coverage (Optional)
-- [ ] 1. Run `npm run test:coverage`
-- [ ] 2. Coverage report is generated
-- [ ] 3. Shows coverage percentages for each file
-- [ ] 4. HTML report is created in `coverage/` folder
-- [ ] 5. Open `coverage/lcov-report/index.html` in browser
+- [x] 1. Run `npm run test:coverage`
+- [x] 2. Coverage report is generated
+- [x] 3. Shows coverage percentages for each file
+- [x] 4. HTML report is created in `coverage/` folder
+- [x] 5. Open `coverage/lcov-report/index.html` in browser
 
 **Expected Result:** ✅ Coverage report shows comprehensive test coverage
 
@@ -405,58 +404,58 @@ Verify each test suite passes:
 This section validates that the recent code refactoring maintains functionality.
 
 #### 11A: Language Detection Utility
-- [ ] 1. Search an **English word** (e.g., "hello")
-- [ ] 2. Check browser console (F12) - should log detected language: "english"
-- [ ] 3. Search a **Malayalam word** (e.g., "നമസ്കാരം")
-- [ ] 4. Console should log detected language: "malayalam"
-- [ ] 5. Search **mixed text** (e.g., "hello മലയാളം")
-- [ ] 6. Should detect as "malayalam" (Malayalam takes priority)
+- [x] 1. Search an **English word** (e.g., "hello")
+- [-] 2. Check browser console (F12) - should log detected language: "english"
+- [x] 3. Search a **Malayalam word** (e.g., "നമസ്കാരം")
+- [-] 4. Console should log detected language: "malayalam"
+- [x] 5. Search **mixed text** (e.g., "hello മലയാളം")
+- [-] 6. Should detect as "malayalam" (Malayalam takes priority)
 
 **Expected Result:** ✅ Language detection works correctly for all word types
 
 #### 11B: URL Construction
-- [ ] 1. Open browser DevTools (F12) → **Network** tab
-- [ ] 2. Search a word (e.g., "book")
-- [ ] 3. Check the Network tab for API request
-- [ ] 4. Verify URL format: `https://olam.in/api/dictionary/english/malayalam/book`
-- [ ] 5. Search a word with **spaces** (e.g., "hello world")
-- [ ] 6. Verify URL encodes spaces: `hello%20world`
-- [ ] 7. Search a word with **special characters** (e.g., "test&query")
-- [ ] 8. Verify special chars are encoded: `test%26query`
+- [x] 1. Open browser DevTools (F12) → **Network** tab
+- [x] 2. Search a word (e.g., "book")
+- [x] 3. Check the Network tab for API request
+- [x] 4. Verify URL format: `https://olam.in/api/dictionary/english/malayalam/book`
+- [x] 5. Search a word with **spaces** (e.g., "hello world")
+- [x] 6. Verify URL encodes spaces: `hello%20world`
+- [x] 7. Search a word with **special characters** (e.g., "test&query")
+- [x] 8. Verify special chars are encoded: `test%26query`
 
 **Expected Result:** ✅ URLs are correctly constructed with proper encoding
 
 #### 11C: Constants Configuration
-- [ ] 1. Open browser console (F12)
-- [ ] 2. Type: `API_BASE_URL` and press Enter
-- [ ] 3. Should output: `"https://olam.in/api/dictionary"`
-- [ ] 4. Type: `DICTIONARY_BASE_URL` and press Enter
-- [ ] 5. Should output: `"https://olam.in/dictionary"`
-- [ ] 6. Type: `DEFAULT_TO_LANG` and press Enter
-- [ ] 7. Should output: `"malayalam"`
+- [x] 1. Open browser console (F12)
+- [x] 2. Type: `API_BASE_URL` and press Enter
+- [x] 3. Should output: `"https://olam.in/api/dictionary"`
+- [x] 4. Type: `DICTIONARY_BASE_URL` and press Enter
+- [x] 5. Should output: `"https://olam.in/dictionary"`
+- [x] 6. Type: `DEFAULT_TO_LANG` and press Enter
+- [x] 7. Should output: `"malayalam"`
 
 **Expected Result:** ✅ Constants are globally available and correctly set
 
 #### 11D: Shared Utilities Integration
-- [ ] 1. Search multiple words in succession (at least 5)
-- [ ] 2. Use both double-click and context menu methods
-- [ ] 3. Check console for any "undefined" errors
-- [ ] 4. Verify all searches work without issues
-- [ ] 5. Open Settings → change language preferences
-- [ ] 6. Perform searches with new settings
-- [ ] 7. Everything continues working smoothly
+- [x] 1. Search multiple words in succession (at least 5)
+- [x] 2. Use both double-click and context menu methods
+- [x] 3. Check console for any "undefined" errors
+- [x] 4. Verify all searches work without issues
+- [x] 5. Open Settings → change language preferences
+- [x] 6. Perform searches with new settings
+- [x] 7. Everything continues working smoothly
 
 **Expected Result:** ✅ All shared utilities work seamlessly across components
 
 #### 11E: Service Worker (Background Script)
-- [ ] 1. Go to `chrome://extensions/`
-- [ ] 2. Find Olam Dictionary extension
-- [ ] 3. Click **"service worker"** link (or **"Inspect views"** → **"background page"**)
-- [ ] 4. Console window opens for background script
-- [ ] 5. Perform a search on any webpage
-- [ ] 6. Background console shows API request logs
-- [ ] 7. No errors appear (red text)
-- [ ] 8. Verify functions are defined: Type `buildApiUrl` → should show function code
+- [x] 1. Go to `chrome://extensions/`
+- [x] 2. Find Olam Dictionary extension
+- [x] 3. Click **"service worker"** link (or **"Inspect views"** → **"background page"**)
+- [x] 4. Console window opens for background script
+- [x] 5. Perform a search on any webpage
+- [x] 6. Background console shows API request logs
+- [x] 7. No errors appear (red text)
+- [x] 8. Verify functions are defined: Type `buildApiUrl` → should show function code
 
 **Expected Result:** ✅ Background service worker runs without errors
 
@@ -465,11 +464,11 @@ This section validates that the recent code refactoring maintains functionality.
 ### Part 13: Cross-Browser Testing (Optional)
 
 If you have Microsoft Edge:
-- [ ] 1. Open **Microsoft Edge** browser
-- [ ] 2. Go to `edge://extensions/`
-- [ ] 3. Follow the same installation steps as Chrome
-- [ ] 4. Repeat key tests (double-click, context menu, settings)
-- [ ] 5. Verify everything works the same
+- [x] 1. Open **Microsoft Edge** browser
+- [x] 2. Go to `edge://extensions/`
+- [x] 3. Follow the same installation steps as Chrome
+- [x] 4. Repeat key tests (double-click, context menu, settings)
+- [x] 5. Verify everything works the same
 
 **Expected Result:** ✅ Extension works identically in Edge
 
@@ -495,31 +494,31 @@ If you have Microsoft Edge:
 
 | Test Category | Status | Notes |
 |--------------|--------|-------|
-| English Double-Click Search | ☐ Pass ☐ Fail | |
-| Malayalam Double-Click Search | ☐ Pass ☐ Fail | |
-| Context Menu Search | ☐ Pass ☐ Fail | |
-| Popup Dragging | ☐ Pass ☐ Fail | |
-| Popup Closing (3 methods) | ☐ Pass ☐ Fail | |
-| Smart Positioning | ☐ Pass ☐ Fail | |
-| Entry Navigation | ☐ Pass ☐ Fail | |
-| Source Filtering | ☐ Pass ☐ Fail | |
-| Settings - Double-Click Toggle | ☐ Pass ☐ Fail | |
-| Settings - Language Preferences | ☐ Pass ☐ Fail | |
-| Settings - Result Limit | ☐ Pass ☐ Fail | |
-| Full Details Link | ☐ Pass ☐ Fail | |
-| No Results Handling | ☐ Pass ☐ Fail | |
-| Page Layout Protection | ☐ Pass ☐ Fail | |
-| Performance (Speed) | ☐ Pass ☐ Fail | |
-| No Console Errors | ☐ Pass ☐ Fail | |
-| **Automated Tests (Developers)** | ☐ Pass ☐ Fail ☐ N/A | |
-| Test Suite Execution | ☐ Pass ☐ Fail ☐ N/A | |
-| All 100 Tests Pass | ☐ Pass ☐ Fail ☐ N/A | |
-| **Code Quality Validation** | ☐ Pass ☐ Fail | |
-| Language Detection | ☐ Pass ☐ Fail | |
-| URL Construction | ☐ Pass ☐ Fail | |
-| Constants Available | ☐ Pass ☐ Fail | |
-| Shared Utilities Integration | ☐ Pass ☐ Fail | |
-| Service Worker Functions | ☐ Pass ☐ Fail | |
+| English Double-Click Search | ✅ Pass ☐ Fail | |
+| Malayalam Double-Click Search | ✅ Pass ☐ Fail | |
+| Context Menu Search | ✅ Pass ☐ Fail | |
+| Popup Dragging | ✅ Pass ☐ Fail | |
+| Popup Closing (3 methods) | ✅ Pass ☐ Fail | |
+| Smart Positioning | ✅ Pass ☐ Fail | |
+| Entry Navigation | ✅ Pass ☐ Fail | |
+| Source Filtering | ✅ Pass ☐ Fail | |
+| Settings - Double-Click Toggle | ✅ Pass ☐ Fail | |
+| Settings - Language Preferences | ✅ Pass ☐ Fail | |
+| Settings - Result Limit | ✅ Pass ☐ Fail | |
+| Full Details Link | ✅ Pass ☐ Fail | |
+| No Results Handling | ✅ Pass ☐ Fail | |
+| Page Layout Protection | ✅ Pass ☐ Fail | |
+| Performance (Speed) | ✅ Pass ☐ Fail | |
+| No Console Errors | ✅ Pass ☐ Fail | |
+| **Automated Tests (Developers)** | ✅ Pass ☐ Fail ☐ N/A | |
+| Test Suite Execution | ✅ Pass ☐ Fail ☐ N/A | |
+| All 100 Tests Pass | ✅ Pass ☐ Fail ☐ N/A | |
+| **Code Quality Validation** | ✅ Pass ☐ Fail | |
+| Language Detection | ✅ Pass ☐ Fail | |
+| URL Construction | ✅ Pass ☐ Fail | |
+| Constants Available | ✅ Pass ☐ Fail | |
+| Shared Utilities Integration | ✅ Pass ☐ Fail | |
+| Service Worker Functions | ✅ Pass ☐ Fail | |
 
 **Total Manual Tests:** _____ / 16
 **Total Developer Tests:** _____ / 8 (or mark N/A if not applicable)
