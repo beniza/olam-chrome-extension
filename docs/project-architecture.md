@@ -36,7 +36,7 @@ The Olam Dictionary Chrome Extension is a Manifest V3 extension that provides in
 - **Single Source of Truth**: Centralized constants and configurations
 - **Event-Driven**: Message passing between contexts
 - **Cached Results**: Local storage for performance
-- **Test-Driven**: 100 automated tests covering all components
+- **Test-Driven**: 105 automated tests covering all components
 
 ---
 
@@ -1805,13 +1805,13 @@ tests/
 │       ├── setupChromeMock()
 │       └── createMockOlamResponse()
 │
-├── unit/                      # Unit tests (97 tests)
+├── unit/                      # Unit tests (102 tests)
 │   ├── api.test.js           # Content script API (11 tests)
 │   ├── background-api.test.js# Background API (17 tests)
 │   ├── appstate.test.js      # State management (16 tests)
 │   ├── settings-service.test.js # Settings (7 tests)
 │   ├── urlBuilder.test.js    # URL builder (19 tests)
-│   └── constants.test.js     # Constants (27 tests)
+│   └── constants.test.js     # Constants (32 tests)
 │
 └── integration/               # Integration tests (3 tests)
     └── search-flow.test.js   # End-to-end flows
@@ -1968,7 +1968,7 @@ function escapeHtml(text) {
 
 ### Maintainability
 1. **Modular design**: Easy to add new features
-2. **Test coverage**: 100 tests ensure stability
+2. **Test coverage**: 105 tests ensure stability
 3. **Documentation**: Comprehensive architecture docs
 4. **Code patterns**: Consistent style and structure
 

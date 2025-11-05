@@ -142,7 +142,7 @@ chrome-plugin/
 │   ├── TESTING_CHECKLIST.md  # Comprehensive testing guide
 │   ├── failing-cases.md      # API inconsistencies report
 │   └── TESTING.md            # Testing documentation
-├── tests/                     # Test suite (100 tests)
+├── tests/                     # Test suite (105 tests)
 ├── utils/                     # Utility modules
 └── plugin-description.json    # Extension metadata
 ```
@@ -238,7 +238,7 @@ npm run test:coverage
 ```
 
 **Test Statistics:**
-- **Total Tests**: 100
+- **Total Tests**: 105
 - **Test Suites**: 7
 - **Coverage**: Unit tests, Integration tests
 
@@ -248,7 +248,7 @@ npm run test:coverage
 - 🌐 **OlamAPI (17 tests)**: Background API communication, caching, error handling
 - ⚙️ **Settings Service (7 tests)**: Chrome storage, default values, validation
 - 🔗 **URL Builder (19 tests)**: URL construction, encoding, consistency
-- 📋 **Constants (27 tests)**: Configuration values, exports, structure validation
+- 📋 **Constants (32 tests)**: Configuration values, exports, structure validation, content script files
 - 🔄 **Integration (3 tests)**: End-to-end search flow, component interaction
 
 **Test Coverage:**
@@ -330,11 +330,13 @@ npm run test:unit
 npm run test:integration
 ```
 
-**Test Suite (54 tests, all passing):**
+**Test Suite (105 tests, all passing):**
 - ✅ **AppState Module**: State management, search data, filtering, navigation (16 tests)
 - ✅ **API Module**: Language detection (English/Malayalam/Unicode), search functionality (11 tests)
 - ✅ **OlamAPI Service**: Dictionary API calls, URL construction, caching, error handling (17 tests)
 - ✅ **SettingsService**: User preferences, defaults, error recovery (7 tests)
+- ✅ **URL Builder**: URL construction, encoding, consistency (19 tests)
+- ✅ **Constants**: Configuration values, exports, content script files (32 tests)
 - ✅ **Integration Tests**: Search flow, settings synchronization (3 tests)
 - ✅ **Chrome Extension API Mocks**: Complete mock implementations for testing
 
@@ -453,7 +455,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 This extension has undergone comprehensive testing to ensure robust handling of real-world scenarios.
 
 ### Automated Testing
-- **100 Test Cases**: Complete coverage of all features and edge cases
+- **105 Test Cases**: Complete coverage of all features and edge cases
 - **Test Framework**: Jest with custom Chrome API mocks
 - **Run Tests**: `npm test` to execute full test suite
 
