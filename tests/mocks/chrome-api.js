@@ -151,22 +151,78 @@ function setupChromeMock() {
 }
 
 /**
- * Create mock Olam API response
+ * Create mock Olam API response matching actual API structure
+ * @param {string} word - The word being searched
+ * @param {string} fromLang - Source language (default: 'english')
+ * @param {string} toLang - Target language (default: 'malayalam')
+ * @returns {Object} Mock API response
  */
-function createMockOlamResponse(word = 'test') {
-  return [
-    {
-      content: [word],
-      relations: [
+function createMockOlamResponse(word = 'test', fromLang = 'english', toLang = 'malayalam') {
+  return {
+    data: {
+      entries: [
         {
-          gloss: ['പരീക്ഷണം', 'പരിശോധന'],
-          info: 'E.K. Kurup',
-          types: ['noun'],
-          tags: ['src:ekkurup']
+          guid: 'mock-guid-1',
+          weight: -1000,
+          initial: word[0].toUpperCase(),
+          lang: fromLang,
+          content: [word],
+          content_length: 1,
+          tokens: `'${word.toLowerCase()}':1`,
+          tags: ['src:ekkurup'],
+          phones: [],
+          notes: '',
+          meta: {},
+          status: 'enabled',
+          relations: [
+            {
+              guid: 'mock-relation-guid-1',
+              weight: 1,
+              initial: 'പ',
+              lang: toLang,
+              content: ['പരീക്ഷണം', 'പരിശോധന'],
+              content_length: 2,
+              tokens: '',
+              tags: ['src:ekkurup'],
+              phones: [],
+              notes: '',
+              meta: {},
+              status: 'enabled',
+              created_at: '2025-11-01T05:15:21.46612Z',
+              updated_at: '2025-11-01T05:15:21.46612Z',
+              total_relations: 1,
+              relation: {
+                types: ['noun'],
+                tags: ['src:ekkurup'],
+                notes: '',
+                weight: 0,
+                status: 'enabled',
+                created_at: '2025-11-01T05:15:21.46612Z',
+                updated_at: '2025-11-01T05:15:21.46612Z'
+              }
+            }
+          ],
+          created_at: '2025-11-01T05:15:21.46612Z',
+          updated_at: '2025-11-01T05:15:21.46612Z',
+          total_relations: 1
         }
-      ]
+      ],
+      query: {
+        q: word,
+        from_lang: fromLang,
+        to_lang: toLang,
+        types: [],
+        tags: [],
+        status: 'enabled',
+        page: 0,
+        per_page: 0
+      },
+      page: 1,
+      per_page: 10,
+      total_pages: 1,
+      total: 1
     }
-  ];
+  };
 }
 
 /**
