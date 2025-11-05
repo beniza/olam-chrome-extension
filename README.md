@@ -4,7 +4,7 @@
 
 A powerful Chrome extension that seamlessly integrates the [Olam.in](https://olam.in) English-Malayalam dictionary into your browsing experience. Get instant translations with just a double-click or right-click.
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 ![License](https://img.shields.io/badge/license-MIT-orange)
 
@@ -361,7 +361,18 @@ npm run test:integration
 
 ## 📊 Version History
 
-### v1.1.0 (Current - Refactored)
+### v1.2.0 (Current)
+- ✨ Smart no-results message with language settings reminder
+- ✨ Clickable link to open settings from no-results message
+- ✨ Automatic popup repositioning on page zoom
+- 🐛 Fixed duplicate importScripts causing service worker failure
+- 🐛 Fixed detectLanguage function reference bug
+- 🐛 Fixed content script injection for context menu
+- ♻️ Refactored code review improvements (removed unused variables, extracted constants)
+- 📚 Updated documentation with new features
+- 🧪 Expanded test suite to 105 tests
+
+### v1.1.0 (Refactored)
 - ✨ Complete codebase refactoring with modular architecture
 - ✨ Added Malayalam word double-click support
 - ✨ Draggable popup functionality
