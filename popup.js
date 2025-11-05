@@ -160,11 +160,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const allBtn = document.createElement("button");
     allBtn.className = "source-filter active";
     allBtn.textContent = "All Sources";
-    allBtn.dataset.source = null;
+    allBtn.dataset.source = "all";
     allBtn.addEventListener("click", function() {
-      appState.setSourceFilter(null);
-      updateActiveFilter(allBtn);
-      displayCurrentEntry();
+      if (!allBtn.classList.contains('active')) {
+        appState.setSourceFilter(null);
+        updateActiveFilter(allBtn);
+        displayCurrentEntry();
+      }
     });
     sourceFiltersDiv.appendChild(allBtn);
 
@@ -186,8 +188,14 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       
       btn.addEventListener("click", function() {
-        appState.setSourceFilter(source);
-        updateActiveFilter(btn);
+        // Toggle: if clicking active button, go back to "All"
+        if (btn.classList.contains('active')) {
+          appState.setSourceFilter(null);
+          updateActiveFilter(allBtn);
+        } else {
+          appState.setSourceFilter(source);
+          updateActiveFilter(btn);
+        }
         displayCurrentEntry();
       });
       sourceFiltersDiv.appendChild(btn);
@@ -197,10 +205,15 @@ document.addEventListener("DOMContentLoaded", function() {
   // Update active filter button
   function updateActiveFilter(activeBtn) {
     const buttons = sourceFiltersDiv.querySelectorAll(".source-filter");
+    const isAllButton = activeBtn.dataset.source === "all";
+    
     buttons.forEach(btn => {
       btn.classList.remove("active", "inactive");
       if (btn !== activeBtn) {
-        btn.classList.add("inactive");
+        // Only add inactive class if "All" is not selected
+        if (!isAllButton) {
+          btn.classList.add("inactive");
+        }
       }
     });
     activeBtn.classList.add("active");
