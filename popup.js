@@ -67,8 +67,9 @@ document.addEventListener("DOMContentLoaded", function() {
           searchInput.value = result.lastSearch.query;
         }
         currentData = result.lastSearch.result;
-        initializeState(currentData);
-        displayCurrentEntry();
+        initializeState(currentData, () => {
+          displayCurrentEntry();
+        });
       }
     });
   }
@@ -77,15 +78,9 @@ document.addEventListener("DOMContentLoaded", function() {
   async function performSearch() {
     const searchText = searchInput.value.trim();
     
-    console.log("Search input value at search time:", searchInput.value);
-    console.log("Trimmed search text:", searchText);
-    
     if (!searchText) {
-      console.log("No search text provided");
       return;
     }
-
-    console.log("Performing search for:", searchText);
 
     // Show loading
     loadingDiv.style.display = "flex";
@@ -98,25 +93,20 @@ document.addEventListener("DOMContentLoaded", function() {
     const fromLang = document.querySelector("input[name=\"fromLang\"]:checked").value;
     const toLang = DEFAULT_TO_LANG;
 
-    console.log("Language direction:", fromLang, "", toLang);
-
     try {
       const apiUrl = buildApiUrl(fromLang, toLang, searchText);
-      console.log("API URL:", apiUrl);
       
       const response = await fetch(apiUrl);
-      console.log("Response status:", response.status);
       
       const data = await response.json();
-      console.log("Response data:", data);
 
       loadingDiv.style.display = "none";
 
       if (data.data && data.data.entries && data.data.entries.length > 0) {
-        console.log("Found", data.data.entries.length, "entries");
         currentData = data;
-        initializeState(data);
-        displayCurrentEntry();
+        initializeState(data, () => {
+          displayCurrentEntry();
+        });
         
         // Save to storage
         chrome.storage.local.set({
@@ -127,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         });
       } else {
-        console.log("No results found");
         showNoResults(fromLang, toLang);
       }
     } catch (error) {
@@ -138,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Initialize app state
-  function initializeState(data) {
+  function initializeState(data, callback) {
     // Get word limit from settings (default is 3)
     chrome.storage.sync.get(["wordLimit"], (result) => {
       const wordLimit = result.wordLimit !== undefined ? result.wordLimit : 3;
@@ -156,6 +145,9 @@ document.addEventListener("DOMContentLoaded", function() {
       } else {
         sourceFiltersDiv.style.display = "none";
       }
+      
+      // Call callback after state is initialized
+      if (callback) callback();
     });
   }
 
@@ -297,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const query = appState.query;
     const linkDiv = document.createElement("div");
     linkDiv.className = "full-link";
-    linkDiv.innerHTML = "<a href=\"" + buildDictionaryUrl(query.from_lang, query.to_lang, query.q) + "\" target=\"_blank\">View full details on olam.in </a>";
+    linkDiv.innerHTML = "<a href=\"" + buildDictionaryUrl(query.from_lang, query.to_lang, query.q) + "\" target=\"_blank\" rel=\"noopener noreferrer\">View full details on olam.in <span aria-label=\"opens in new tab\">(↗)</span></a>";
     resultsDiv.appendChild(linkDiv);
   }
 
