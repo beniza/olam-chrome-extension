@@ -233,20 +233,16 @@ describe('OlamAPI Service', () => {
 });
 
 describe('detectLanguage() Utility', () => {
+  function detectLanguage(text) {
+    return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
+  }
+  
   test('should detect English text', () => {
-    function detectLanguage(text) {
-      return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-    }
-    
     expect(detectLanguage('hello')).toBe('english');
     expect(detectLanguage('test')).toBe('english');
   });
   
   test('should detect Malayalam text', () => {
-    function detectLanguage(text) {
-      return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-    }
-    
     expect(detectLanguage('മലയാളം')).toBe('malayalam');
     expect(detectLanguage('നമസ്കാരം')).toBe('malayalam');
   });
