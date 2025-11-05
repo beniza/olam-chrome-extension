@@ -13,11 +13,11 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 ## ✨ Features
 
 ### Core Functionality
-- �️ **Double-Click Search**: Simply double-click any word to see its translation
+- 🖱️ **Double-Click Search**: Simply double-click any word to see its translation
 - 📋 **Context Menu Search**: Right-click selected text for instant lookup
-- � **Multi-Language Support**: English → Malayalam and Malayalam → Malayalam lookups
+- 🌍 **Multi-Language Support**: English → Malayalam and Malayalam → Malayalam lookups
 - 🔄 **Auto Language Detection**: Automatically identifies Malayalam text (Unicode U+0D00-U+0D7F)
-- � **Smart Positioning**: Popup appears near cursor and adjusts to stay on-screen
+- 📍 **Smart Positioning**: Popup appears near cursor and adjusts to stay on-screen
 - 🖐️ **Draggable Popup**: Move the popup anywhere by dragging the title bar
 
 ### Advanced Features
