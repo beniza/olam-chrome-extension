@@ -131,9 +131,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Initialize app state
   function initializeState(data) {
-    // Get word limit from settings
+    // Get word limit from settings (default is 3)
     chrome.storage.sync.get(["wordLimit"], (result) => {
-      const wordLimit = result.wordLimit || DEFAULT_WORD_LIMIT;
+      const wordLimit = result.wordLimit !== undefined ? result.wordLimit : 3;
       
       appState = new AppState({
         entries: data.data.entries,
