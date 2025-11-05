@@ -18,6 +18,7 @@
 const AppState = {
   // UI References
   popup: null,
+  popupPosition: null,  // Store original click coordinates for repositioning
   
   // User Settings
   doubleClickEnabled: true,
@@ -347,18 +348,31 @@ const UI = {
   calculatePosition(x, y, popupRect) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
     
-    let left = x + 10;
-    let top = y + 10;
+    // Get page zoom level (visual viewport accounts for zoom)
+    const zoom = window.visualViewport ? window.visualViewport.scale : 1;
     
-    // Adjust if popup goes off-screen
-    if (left + popupRect.width > viewportWidth) {
-      left = viewportWidth - popupRect.width - 20;
+    // Adjust coordinates for zoom
+    const adjustedX = x / zoom;
+    const adjustedY = y / zoom;
+    
+    let left = adjustedX + 10;
+    let top = adjustedY + 10;
+    
+    // Adjust if popup goes off-screen (account for zoom)
+    if (left + popupRect.width > viewportWidth / zoom) {
+      left = (viewportWidth / zoom) - popupRect.width - 20;
     }
     
-    if (top + popupRect.height > viewportHeight) {
-      top = y - popupRect.height - 10;
+    if (top + popupRect.height > viewportHeight / zoom) {
+      top = adjustedY - popupRect.height - 10;
     }
+    
+    // Ensure popup stays within viewport bounds
+    left = Math.max(10, Math.min(left, (viewportWidth / zoom) - popupRect.width - 10));
+    top = Math.max(10, Math.min(top, (viewportHeight / zoom) - popupRect.height - 10));
     
     return { left, top };
   },
@@ -378,6 +392,27 @@ const UI = {
     
     popup.style.left = `${position.left}px`;
     popup.style.top = `${position.top}px`;
+    
+    // Store original coordinates for repositioning
+    AppState.popupPosition = { x, y };
+  },
+  
+  /**
+   * Reposition popup (e.g., after zoom/resize)
+   */
+  repositionPopup() {
+    if (!AppState.popup || !AppState.popupPosition) return;
+    if (!AppState.popup.classList.contains('olam-popup-visible')) return;
+    
+    const popupRect = AppState.popup.getBoundingClientRect();
+    const position = this.calculatePosition(
+      AppState.popupPosition.x, 
+      AppState.popupPosition.y, 
+      popupRect
+    );
+    
+    AppState.popup.style.left = `${position.left}px`;
+    AppState.popup.style.top = `${position.top}px`;
   },
   
   /**
@@ -771,6 +806,7 @@ const EventHandlers = {
     this.setupKeyboard();
     this.setupClickOutside();
     this.setupMessageListener();
+    this.setupResizeAndZoom();
   },
   
   /**
@@ -868,6 +904,31 @@ const EventHandlers = {
       }
       return true;
     });
+  },
+  
+  /**
+   * Setup resize and zoom event listeners
+   */
+  setupResizeAndZoom() {
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        UI.repositionPopup();
+      }, 100);
+    });
+    
+    // Handle visual viewport changes (zoom)
+    if (window.visualViewport) {
+      let zoomTimeout;
+      window.visualViewport.addEventListener('resize', () => {
+        clearTimeout(zoomTimeout);
+        zoomTimeout = setTimeout(() => {
+          UI.repositionPopup();
+        }, 100);
+      });
+    }
   },
   
   /**
