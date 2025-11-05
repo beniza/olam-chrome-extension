@@ -1,8 +1,8 @@
 {
   "extensionName": "Olam Dictionary Chrome Extension",
-  "version": "1.0.1",
-  "description": "A Chrome extension that provides instant English-Malayalam dictionary lookup on any webpage using the Olam dictionary API. Features inline popup display, source filtering, and multi-entry navigation. Fixed layout interference issues with webpage content.",
-  "lastUpdated": "2025-11-04",
+  "version": "1.2.1",
+  "description": "A Chrome extension that provides instant English-Malayalam dictionary lookup on any webpage using the Olam dictionary API. Features inline popup display, source filtering, multi-entry navigation, and a fully-featured browser action popup with search capabilities.",
+  "lastUpdated": "2025-11-05",
   
   "features": {
     "primary": [

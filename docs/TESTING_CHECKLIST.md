@@ -1,20 +1,22 @@
 # Olam Dictionary Chrome Extension - Testing Guide
 
-## 🆕 What's New in Version 1.2.0
+## 🆕 What's New in Version 1.2.1
 
-This version includes smart UX improvements and bug fixes:
+This version includes critical bug fixes and accessibility improvements:
 
-### ✨ New Features
-- **Smart No-Results Message**: Shows current language settings when no results found
-- **Quick Settings Access**: Clickable link to open settings from no-results message
-- **Zoom Support**: Popup automatically repositions when page is zoomed in/out
-- **Enhanced UX**: Helps users understand why searches fail due to language mismatches
+### 🐛 Critical Bug Fixes
+- **Fixed race condition in popup initialization**: Resolved issue where pressing Enter would search for the previous term instead of the current one on first press
+- **Proper async operation sequencing**: Refactored state initialization to use callbacks ensuring reliable popup behavior
 
-### � Bug Fixes
-- Fixed duplicate importScripts causing service worker registration failure
-- Fixed detectLanguage function reference bug in content script
-- Fixed content script injection for context menu on pages without pre-loaded scripts
-- Removed unused variables (scrollX, scrollY) for code clarity
+### ♿ Accessibility Improvements
+- **ARIA labels for navigation**: Added proper labels to Previous/Next entry buttons
+- **Settings button accessibility**: Added ARIA label to settings gear icon
+- **External link indicators**: Added "opens in new tab" ARIA labels and visual indicators
+- **Security enhancement**: Added `rel="noopener noreferrer"` to external links
+
+### 🧹 Code Quality
+- **Removed debug logs**: Cleaned up all console.log statements from production code
+- **Production-ready**: All code passes quality standards for release
 
 ### ♻️ Code Improvements
 - Extracted CONTENT_SCRIPT_FILES constant for single source of truth
@@ -218,7 +220,7 @@ Test all three methods:
 - [x] 1. In Settings, find "Language Preferences"
 - [x] 2. **Search from:** dropdown shows "Auto-detect" (default)
 - [x] 3. Change it to "Malayalam"
-- [ ] 4. **Translate to:** change to "English"
+- [x] 4. **Translate to:** change to "English"
 - [x] 5. Settings save automatically (green "Settings saved!" message appears)
 - [x] 6. Use context menu (right-click) to search a Malayalam word
 - [x] 7. Results use the selected language preferences
@@ -245,7 +247,7 @@ Test all three methods:
 
 #### 7A: View Full Details Link
 - [x] 1. Open any search result
-- [ ] 2. Click the **"View full details →"** link at the bottom
+- [x] 2. Click the **"View full details →"** link at the bottom
 - [x] 3. Opens https://olam.in website in a new tab
 - [x] 4. Shows the complete dictionary entry with all details
 

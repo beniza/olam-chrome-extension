@@ -1,6 +1,6 @@
 # Olam Dictionary Chrome Extension - Project Architecture
 
-**Version:** 1.1.0  
+**Version:** 1.2.1  
 **Last Updated:** November 5, 2025
 
 ---

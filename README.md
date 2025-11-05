@@ -361,7 +361,14 @@ npm run test:integration
 
 ## 📊 Version History
 
-### v1.2.0 (Current)
+### v1.2.1 (Current)
+- 🐛 Fixed critical race condition in popup state initialization
+- ♿ Added ARIA labels for accessibility (navigation buttons, settings, external links)
+- 🔒 Enhanced security with rel="noopener noreferrer" on external links
+- 🧹 Removed debug console.log statements for production
+- ✅ Production-ready release with comprehensive quality checks
+
+### v1.2.0
 - ✨ Smart no-results message with language settings reminder
 - ✨ Clickable link to open settings from no-results message
 - ✨ Automatic popup repositioning on page zoom
