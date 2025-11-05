@@ -315,7 +315,7 @@ npm test
 
 ### Automated Testing
 
-The project includes comprehensive automated testing using Jest. See [TESTING.md](TESTING.md) for detailed testing documentation.
+The project includes comprehensive automated testing using Jest. See [docs/TESTING.md](docs/TESTING.md) for detailed testing documentation.
 
 ```bash
 # Run all tests
