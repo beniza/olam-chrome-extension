@@ -85,7 +85,7 @@ describe('Settings Integration', () => {
     
     const newSettings = {
       fromLanguage: 'malayalam',
-      toLanguage: 'english',
+      toLanguage: 'malayalam',
       doubleClickEnabled: false,
       resultLimit: 10
     };

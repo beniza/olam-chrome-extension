@@ -14,7 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set language preferences (defaults: auto -> malayalam)
     fromLanguageSelect.value = result.fromLanguage || 'auto';
-    toLanguageSelect.value = result.toLanguage || 'malayalam';
+    
+    // Always force toLanguage to malayalam (only supported option)
+    toLanguageSelect.value = 'malayalam';
+    
+    // Update storage if it had invalid value
+    if (result.toLanguage !== 'malayalam') {
+      chrome.storage.sync.set({ toLanguage: 'malayalam' });
+    }
     
     // Set result limit (default: 3)
     resultLimitSelect.value = result.resultLimit || '3';
@@ -57,8 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   toLanguageSelect.addEventListener('change', function() {
+    // Always enforce malayalam as target language (only supported option)
     chrome.storage.sync.set({
-      toLanguage: toLanguageSelect.value
+      toLanguage: 'malayalam'
     }, showStatus);
   });
   

@@ -15,7 +15,7 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 ### Core Functionality
 - �️ **Double-Click Search**: Simply double-click any word to see its translation
 - 📋 **Context Menu Search**: Right-click selected text for instant lookup
-- � **Bi-directional Translation**: English ↔ Malayalam support
+- � **Multi-Language Support**: English → Malayalam and Malayalam → Malayalam lookups
 - 🔄 **Auto Language Detection**: Automatically identifies Malayalam text (Unicode U+0D00-U+0D7F)
 - � **Smart Positioning**: Popup appears near cursor and adjusts to stay on-screen
 - 🖐️ **Draggable Popup**: Move the popup anywhere by dragging the title bar
@@ -30,7 +30,7 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 
 ### User Settings
 - **Double-Click Toggle**: Enable/disable double-click functionality
-- **Language Preferences**: Choose source and target languages (Auto-detect, English, Malayalam)
+- **Language Preferences**: Configure source language (Auto-detect, English, Malayalam) and target (Malayalam only)
 - **Result Limit**: Display 3, 5, 10, or all translation words
 
 ---
@@ -113,10 +113,10 @@ Access settings by clicking the gear icon (⚙) in any dictionary popup.
 |---------|---------|---------|-------------|
 | **Double-click to search** | On/Off | On | Enable or disable double-click word lookup |
 | **Search from** | Auto-detect, English, Malayalam | Auto-detect | Source language for context menu searches |
-| **Translate to** | Malayalam, English | Malayalam | Target language for translations |
+| **Translate to** | Malayalam | Malayalam | Target language for translations |
 | **Number of words** | 3, 5, 10, All | 3 | How many translation words to display |
 
-> **Note**: Double-click search always auto-detects language. Language settings apply to context menu searches.
+> **Note**: Double-click search always auto-detects language. Currently supports English → Malayalam and Malayalam → Malayalam lookups.
 
 ---
 
@@ -175,16 +175,12 @@ chrome-plugin/
 - **Base URL**: `https://olam.in/api/dictionary/{from_lang}/{to_lang}/{word}`
 - **Supported Languages**: 
   - `english` → `malayalam`
-  - `malayalam` → `english`
   - `malayalam` → `malayalam`
 
 ### Example API Calls
 ```bash
 # English to Malayalam
 https://olam.in/api/dictionary/english/malayalam/hello
-
-# Malayalam to English
-https://olam.in/api/dictionary/malayalam/english/മലയാളം
 
 # Malayalam to Malayalam
 https://olam.in/api/dictionary/malayalam/malayalam/നമസ്കാരം
@@ -290,10 +286,10 @@ npm run test:integration
 
 **Test Suite (54 tests, all passing):**
 - ✅ **AppState Module**: State management, search data, filtering, navigation (16 tests)
-- ✅ **API Module**: Language detection (English/Malayalam/Unicode), search functionality (8 tests)
-- ✅ **OlamAPI Service**: Dictionary API calls, URL construction, caching, error handling (12 tests)
-- ✅ **SettingsService**: User preferences, defaults, error recovery (6 tests)
-- ✅ **Integration Tests**: Search flow, settings synchronization (2 tests)
+- ✅ **API Module**: Language detection (English/Malayalam/Unicode), search functionality (11 tests)
+- ✅ **OlamAPI Service**: Dictionary API calls, URL construction, caching, error handling (17 tests)
+- ✅ **SettingsService**: User preferences, defaults, error recovery (7 tests)
+- ✅ **Integration Tests**: Search flow, settings synchronization (3 tests)
 - ✅ **Chrome Extension API Mocks**: Complete mock implementations for testing
 
 **Test Coverage Targets:**
@@ -335,7 +331,7 @@ npm run test:integration
 ### v1.0.0
 - 🎉 Initial release
 - 🔍 Basic double-click and context menu search
-- 🌐 English-Malayalam translation
+- 🌐 English → Malayalam translation
 - 🎨 Clean popup UI
 
 ---

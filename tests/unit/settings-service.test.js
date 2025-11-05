@@ -62,14 +62,14 @@ describe('SettingsService', () => {
     
     test('should use default for missing fromLanguage', async () => {
       chrome.storage.sync.get.mockResolvedValueOnce({
-        toLanguage: 'english'
+        toLanguage: 'malayalam'
       });
       
       const prefs = await SettingsService.getLanguagePreferences();
       
       expect(prefs).toEqual({
         fromLang: DEFAULT_FROM_LANG,
-        toLang: 'english'
+        toLang: 'malayalam'
       });
     });
     
@@ -108,17 +108,17 @@ describe('SettingsService', () => {
       expect(prefs.fromLang).toBe('auto');
     });
     
-    test('should handle Malayalam to English translation', async () => {
+    test('should handle Malayalam to Malayalam translation', async () => {
       chrome.storage.sync.get.mockResolvedValueOnce({
         fromLanguage: 'malayalam',
-        toLanguage: 'english'
+        toLanguage: 'malayalam'
       });
       
       const prefs = await SettingsService.getLanguagePreferences();
       
       expect(prefs).toEqual({
         fromLang: 'malayalam',
-        toLang: 'english'
+        toLang: 'malayalam'
       });
     });
   });

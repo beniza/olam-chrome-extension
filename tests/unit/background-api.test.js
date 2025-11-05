@@ -156,10 +156,10 @@ describe('OlamAPI Service', () => {
         json: async () => mockData
       });
       
-      await OlamAPI.search('മലയാളം', 'malayalam', 'english');
+      await OlamAPI.search('മലയാളം', 'malayalam', 'malayalam');
       
       expect(fetch).toHaveBeenCalledWith(
-        expect.stringContaining('malayalam/english/')
+        expect.stringContaining('malayalam/malayalam/')
       );
     });
   });

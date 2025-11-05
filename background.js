@@ -247,6 +247,14 @@ const MessageHandler = {
       fromLang = detectLanguage(text);
     }
     
+    // Validate language combination: Only malayalam is supported as target
+    // Supported: english -> malayalam, malayalam -> malayalam
+    // Not supported: malayalam -> english
+    if (toLang !== 'malayalam') {
+      console.warn(`Unsupported target language: ${toLang}. Forcing to malayalam.`);
+      toLang = 'malayalam';
+    }
+    
     try {
       const data = await OlamAPI.search(text, fromLang, toLang);
       sendResponse({ success: true, data: data });
