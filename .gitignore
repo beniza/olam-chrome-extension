@@ -1,0 +1,36 @@
+node_modules
+
+coverage/node_modules/
+
+package-lock.json
+
+release/# Extension package files
+
+.local/*.crx
+
+*.pem
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Local files
+.local/
+
+# Build output
+release/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Package lock files
+package-lock.json
+yarn.lock
