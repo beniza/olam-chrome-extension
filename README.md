@@ -4,7 +4,7 @@
 
 A powerful Chrome extension that seamlessly integrates the [Olam.in](https://olam.in) English-Malayalam dictionary into your browsing experience. Get instant translations with just a double-click or right-click.
 
-![Version](https://img.shields.io/badge/version-1.2.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.1-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 ![License](https://img.shields.io/badge/license-MIT-orange)
 
@@ -529,7 +529,48 @@ See [docs/failing-cases.md](docs/failing-cases.md) for documented API limitation
 
 ---
 
-## 📞 Support
+## � Changelog
+
+### v1.2.1 (2025-11-05)
+
+**Bug Fixes**
+- Fixed race condition in state initialization that caused "press Enter twice" bug
+- Properly sequenced async operations for reliable popup initialization
+
+**Accessibility Improvements**
+- Added ARIA labels to navigation buttons (Previous/Next entry)
+- Added ARIA label to settings button
+- Added external link indicator with proper ARIA labeling
+- Added `rel="noopener noreferrer"` to external links for security
+
+**Code Quality**
+- Removed debug console.log statements from production code
+- Cleaned up code for production release
+
+### v1.2.0 (2025-11-05)
+
+**Major Features**
+- Feature-complete extension popup with all double-click popup capabilities
+- Entry navigation with previous/next buttons and counter
+- Source filtering with color-coded buttons
+- Smart no-results message with language settings display
+- Settings gear icon for quick access
+- Last search persistence
+
+**UI/UX Improvements**
+- Elegant styling matching double-click popup theme
+- Consistent color palette and design language
+- Smooth transitions and hover states
+- Filter toggling and inactive state visual hierarchy
+
+**Technical Improvements**
+- New AppState class for centralized state management
+- 100% test coverage for utils directory
+- Better code organization and modularity
+
+---
+
+## �📞 Support
 
 ### Getting Help
 - 📖 **Documentation**: Read [docs/TESTING_CHECKLIST.md](docs/TESTING_CHECKLIST.md) for detailed guides

@@ -1,6 +1,6 @@
 {
   "name": "olam-chrome-extension",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Chrome extension for English-Malayalam dictionary lookups using Olam.in",
   "scripts": {
     "test": "jest",
