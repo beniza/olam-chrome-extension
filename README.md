@@ -43,7 +43,7 @@ A powerful Chrome extension that seamlessly integrates the [Olam.in](https://ola
 
 1. **Download the Extension**
    - Go to the [Releases page](https://github.com/beniza/olam-chrome-extension/releases)
-   - Download the latest `olam-dictionary-extension-v1.1.0.zip` file
+   - Download the latest release ZIP file
    - Extract all files to a folder (e.g., `olam-dictionary-extension`)
 
 2. **Load in Chrome**
@@ -169,7 +169,7 @@ chrome-plugin/
 - **MessageHandler**: Inter-script communication
 - **Constants**: Configuration values
 
-📖 **Architecture details**: See [REFACTORING.md](REFACTORING.md)
+📖 **Architecture details**: See [docs/project-architecture.md](docs/project-architecture.md)
 
 ---
 
@@ -371,7 +371,7 @@ npm run test:integration
 - 🐛 Fixed template string syntax issues
 - 🐛 Fixed context menu search with proper language handling
 - 🐛 Fixed page layout interference
-- 📚 Added extensive documentation (REFACTORING.md, docs/TESTING_CHECKLIST.md)
+- 📚 Added extensive documentation (docs/project-architecture.md, docs/TESTING_CHECKLIST.md)
 
 ### v1.0.1
 - 🐛 Fixed page layout shrinkage issue
