@@ -152,18 +152,9 @@ const Settings = {
 
 /**
  * API communication handler
+ * Note: detectLanguage is now imported from utils/detectLanguage.js via manifest
  */
 const API = {
-  /**
-   * Detect language from text
-   * @param {string} text - Text to analyze
-   * @returns {string} Detected language code
-   */
-  detectLanguage(text) {
-    // Malayalam characters are in range U+0D00 to U+0D7F
-    return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-  },
-  
   /**
    * Search for a word in Olam dictionary
    * @param {string} text - Word to search
@@ -172,7 +163,7 @@ const API = {
    * @returns {Promise<Object>} API response
    */
   async search(text, fromLang = null, toLang = 'malayalam') {
-    const sourceLang = fromLang || this.detectLanguage(text);
+    const sourceLang = fromLang || detectLanguage(text);
     
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({

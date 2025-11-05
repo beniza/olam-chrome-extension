@@ -233,9 +233,8 @@ describe('OlamAPI Service', () => {
 });
 
 describe('detectLanguage() Utility', () => {
-  function detectLanguage(text) {
-    return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-  }
+  // Import the actual implementation from shared utilities
+  const { detectLanguage } = require('../../utils/detectLanguage');
   
   test('should detect English text', () => {
     expect(detectLanguage('hello')).toBe('english');

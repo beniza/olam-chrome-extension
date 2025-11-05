@@ -6,6 +6,9 @@
 
 'use strict';
 
+// Import shared utilities
+importScripts('utils/detectLanguage.js');
+
 // =============================================================================
 // CONSTANTS
 // =============================================================================
@@ -14,20 +17,6 @@ const API_BASE_URL = 'https://olam.in/api/dictionary';
 const CONTEXT_MENU_ID = 'searchOlam';
 const DEFAULT_FROM_LANG = 'auto';
 const DEFAULT_TO_LANG = 'malayalam';
-
-// =============================================================================
-// UTILITY FUNCTIONS
-// =============================================================================
-
-/**
- * Detect language from text
- * @param {string} text - Text to analyze
- * @returns {string} Detected language code
- */
-function detectLanguage(text) {
-  // Malayalam characters are in range U+0D00 to U+0D7F
-  return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-}
 
 // =============================================================================
 // API SERVICE

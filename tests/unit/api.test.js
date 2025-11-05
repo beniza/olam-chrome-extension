@@ -4,6 +4,7 @@
  */
 
 const { setupChromeMock } = require('../mocks/chrome-api');
+const { detectLanguage } = require('../../utils/detectLanguage');
 
 describe('API Module', () => {
   let API;
@@ -13,12 +14,8 @@ describe('API Module', () => {
     
     // Recreate API module
     API = {
-      detectLanguage(text) {
-        return /[\u0D00-\u0D7F]/.test(text) ? 'malayalam' : 'english';
-      },
-      
       async search(text, fromLang = null, toLang = 'malayalam') {
-        const sourceLang = fromLang || this.detectLanguage(text);
+        const sourceLang = fromLang || detectLanguage(text);
         
         return new Promise((resolve, reject) => {
           chrome.runtime.sendMessage({
@@ -45,38 +42,38 @@ describe('API Module', () => {
   
   describe('detectLanguage()', () => {
     test('should detect English text', () => {
-      expect(API.detectLanguage('hello')).toBe('english');
-      expect(API.detectLanguage('test word')).toBe('english');
-      expect(API.detectLanguage('Hello World!')).toBe('english');
+      expect(detectLanguage('hello')).toBe('english');
+      expect(detectLanguage('test word')).toBe('english');
+      expect(detectLanguage('Hello World!')).toBe('english');
     });
     
     test('should detect Malayalam text', () => {
-      expect(API.detectLanguage('മലയാളം')).toBe('malayalam');
-      expect(API.detectLanguage('നമസ്കാരം')).toBe('malayalam');
-      expect(API.detectLanguage('പരീക്ഷ')).toBe('malayalam');
+      expect(detectLanguage('മലയാളം')).toBe('malayalam');
+      expect(detectLanguage('നമസ്കാരം')).toBe('malayalam');
+      expect(detectLanguage('പരീക്ഷ')).toBe('malayalam');
     });
     
     test('should detect Malayalam in mixed text', () => {
-      expect(API.detectLanguage('hello മലയാളം')).toBe('malayalam');
-      expect(API.detectLanguage('test പരീക്ഷ word')).toBe('malayalam');
+      expect(detectLanguage('hello മലയാളം')).toBe('malayalam');
+      expect(detectLanguage('test പരീക്ഷ word')).toBe('malayalam');
     });
     
     test('should handle numbers and special characters', () => {
-      expect(API.detectLanguage('123')).toBe('english');
-      expect(API.detectLanguage('!@#$%')).toBe('english');
-      expect(API.detectLanguage('test123')).toBe('english');
+      expect(detectLanguage('123')).toBe('english');
+      expect(detectLanguage('!@#$%')).toBe('english');
+      expect(detectLanguage('test123')).toBe('english');
     });
     
     test('should handle empty string', () => {
-      expect(API.detectLanguage('')).toBe('english');
+      expect(detectLanguage('')).toBe('english');
     });
     
     test('should handle Unicode Malayalam range correctly', () => {
       // Test Malayalam Unicode range boundaries (U+0D00 to U+0D7F)
-      expect(API.detectLanguage('\u0D00')).toBe('malayalam'); // Start of range
-      expect(API.detectLanguage('\u0D7F')).toBe('malayalam'); // End of range
-      expect(API.detectLanguage('\u0CFF')).toBe('english');   // Before range
-      expect(API.detectLanguage('\u0D80')).toBe('english');   // After range
+      expect(detectLanguage('\u0D00')).toBe('malayalam'); // Start of range
+      expect(detectLanguage('\u0D7F')).toBe('malayalam'); // End of range
+      expect(detectLanguage('\u0CFF')).toBe('english');   // Before range
+      expect(detectLanguage('\u0D80')).toBe('english');   // After range
     });
   });
   
