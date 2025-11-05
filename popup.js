@@ -34,9 +34,10 @@ document.addEventListener("DOMContentLoaded", function() {
   // Search button click
   searchBtn.addEventListener("click", performSearch);
 
-  // Enter key in search input
-  searchInput.addEventListener("keypress", function(e) {
+  // Enter key in search input (using keydown for better compatibility)
+  searchInput.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
+      e.preventDefault();
       performSearch();
     }
   });
