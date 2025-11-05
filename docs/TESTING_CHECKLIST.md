@@ -1,35 +1,40 @@
 # Olam Dictionary Chrome Extension - Testing Guide
 
-## 🆕 What's New in Version 1.1.0
+## 🆕 What's New in Version 1.2.0
 
-This version includes major improvements to code quality and testing:
+This version includes smart UX improvements and bug fixes:
 
-### ✅ Automated Testing
-- **100 comprehensive tests** covering all functionality
-- Jest testing framework with Chrome Extension API mocking
-- Unit tests for all components
-- Integration tests for end-to-end flows
-- Run tests with: `npm test`
+### ✨ New Features
+- **Smart No-Results Message**: Shows current language settings when no results found
+- **Quick Settings Access**: Clickable link to open settings from no-results message
+- **Zoom Support**: Popup automatically repositions when page is zoomed in/out
+- **Enhanced UX**: Helps users understand why searches fail due to language mismatches
 
-### 🔧 Code Refactoring
-- **Shared utility modules** in `utils/` directory:
-  - `detectLanguage.js` - Language detection (Malayalam/English)
-  - `constants.js` - Configuration constants (API URLs, defaults)
-  - `urlBuilder.js` - URL construction with proper encoding
-- Eliminated code duplication across multiple files
-- Improved maintainability and reliability
+### � Bug Fixes
+- Fixed duplicate importScripts causing service worker registration failure
+- Fixed detectLanguage function reference bug in content script
+- Fixed content script injection for context menu on pages without pre-loaded scripts
+- Removed unused variables (scrollX, scrollY) for code clarity
 
-### 🐛 Bug Fixes
-- Corrected language support documentation
-- Fixed broken emoji characters in README
-- Added validation to enforce Malayalam as target language
+### ♻️ Code Improvements
+- Extracted CONTENT_SCRIPT_FILES constant for single source of truth
+- Updated Chrome API mocks to match real API structure
+- Code review improvements implemented
+- **105 comprehensive tests** (expanded from 100)
+
+### � Documentation Updates
+- Updated all documentation to reflect new features
+- Fixed README references and made version-agnostic
+- Added corner case documentation for zoom and language settings
 - Improved error handling
 
 ### 📋 New Testing Sections
 This checklist now includes:
-- **Part 10:** Automated test suite validation (for developers)
-- **Part 11:** Code quality and refactoring validation
-- New troubleshooting entries for utility modules
+- **Part 7C:** Wrong language setting handling
+- **Part 8:** Zoom support testing (new in v1.2.0)
+- **Part 11:** Automated test suite validation (105 tests)
+- **Part 12:** Code quality and refactoring validation
+- Updated no-results message testing with language settings
 
 ---
 
@@ -70,7 +75,7 @@ Welcome! This guide will help you install and test the Olam Dictionary Chrome Ex
 
 ✅ **Success indicators:**
 - The extension appears in your extensions list with the Olam Dictionary icon
-- Extension version shows: **1.1.0**
+- Extension version shows: **1.2.0**
 - No error messages are displayed
 - The extension is enabled (toggle switch is blue/on)
 
@@ -91,14 +96,14 @@ Welcome! This guide will help you install and test the Olam Dictionary Chrome Ex
 - Visit any English website (e.g., https://en.wikipedia.org or https://www.bbc.com/news)
 
 **Steps:**
-- [ ] 1. Double-click on any English word (e.g., "dictionary", "search", "article")
-- [ ] 2. A popup window appears near your cursor
-- [ ] 3. The popup shows:
+- [x] 1. Double-click on any English word (e.g., "dictionary", "search", "article")
+- [x] 2. A popup window appears near your cursor
+- [x] 3. The popup shows:
   - "Olam Dictionary" header with icon
   - Malayalam translation(s)
   - Word type (noun, verb, etc.)
   - "View full details →" link
-- [ ] 4. Verify the Malayalam text displays correctly (not squares/gibberish)
+- [x] 4. Verify the Malayalam text displays correctly (not squares/gibberish)
 
 **Expected Result:** ✅ Popup appears within 1 second with accurate Malayalam translations
 
@@ -110,10 +115,10 @@ Welcome! This guide will help you install and test the Olam Dictionary Chrome Ex
 - Visit a Malayalam news website (e.g., https://www.manoramaonline.com)
 
 **Steps:**
-- [ ] 1. Double-click on a Malayalam word
-- [ ] 2. Popup appears near the cursor
-- [ ] 3. English translation(s) are displayed
-- [ ] 4. The search completes successfully
+- [x] 1. Double-click on a Malayalam word
+- [x] 2. Popup appears near the cursor
+- [x] 3. English translation(s) are displayed
+- [x] 4. The search completes successfully
 
 **Expected Result:** ✅ Malayalam words can be searched and display English meanings
 
@@ -122,11 +127,11 @@ Welcome! This guide will help you install and test the Olam Dictionary Chrome Ex
 ### Part 3: Context Menu Search
 
 **Steps:**
-- [ ] 1. On any webpage, **select** a word by clicking and dragging (don't double-click)
-- [ ] 2. **Right-click** on the selected word
-- [ ] 3. Choose **"Search [word] in Olam Dictionary"** from the context menu
-- [ ] 4. Popup appears near the selected text with results
-- [ ] 5. No loading spinner appears (results show immediately or within 1 second)
+- [x] 1. On any webpage, **select** a word by clicking and dragging (don't double-click)
+- [x] 2. **Right-click** on the selected word
+- [x] 3. Choose **"Search [word] in Olam Dictionary"** from the context menu
+- [x] 4. Popup appears near the selected text with results
+- [x] 5. No loading spinner appears (results show immediately or within 1 second)
 
 **Expected Result:** ✅ Context menu search works for both English and Malayalam words
 
@@ -135,29 +140,29 @@ Welcome! This guide will help you install and test the Olam Dictionary Chrome Ex
 ### Part 4: Popup Behavior
 
 #### 4A: Dragging the Popup
-- [ ] 1. Open a search result (double-click any word)
-- [ ] 2. Move your mouse over the **blue header bar** (where it says "Olam Dictionary")
-- [ ] 3. Notice the cursor changes to a "move" icon (hand/arrows)
-- [ ] 4. Click and **drag** the header to move the popup to a different location
-- [ ] 5. The popup follows your mouse and repositions smoothly
+- [x] 1. Open a search result (double-click any word)
+- [x] 2. Move your mouse over the **blue header bar** (where it says "Olam Dictionary")
+- [x] 3. Notice the cursor changes to a "move" icon (hand/arrows)
+- [x] 4. Click and **drag** the header to move the popup to a different location
+- [x] 5. The popup follows your mouse and repositions smoothly
 
 **Expected Result:** ✅ Popup can be dragged to any position on the screen
 
 #### 4B: Closing the Popup
 
 Test all three methods:
-- [ ] 1. Click the **× button** (top-right of popup) → popup closes
-- [ ] 2. Press the **Escape key** on your keyboard → popup closes
-- [ ] 3. Click **anywhere outside the popup** → popup closes
+- [x] 1. Click the **× button** (top-right of popup) → popup closes
+- [x] 2. Press the **Escape key** on your keyboard → popup closes
+- [x] 3. Click **anywhere outside the popup** → popup closes
 
 **Expected Result:** ✅ All three methods successfully close the popup
 
 #### 4C: Smart Positioning
-- [ ] 1. Double-click a word near the **right edge** of the browser window
-- [ ] 2. Popup appears but stays within the visible area (doesn't get cut off)
-- [ ] 3. Double-click a word near the **bottom edge**
-- [ ] 4. Popup appears above the word instead of below
-- [ ] 5. Popup never goes off-screen
+- [x] 1. Double-click a word near the **right edge** of the browser window
+- [x] 2. Popup appears but stays within the visible area (doesn't get cut off)
+- [x] 3. Double-click a word near the **bottom edge**
+- [x] 4. Popup appears above the word instead of below
+- [x] 5. Popup never goes off-screen
 
 **Expected Result:** ✅ Popup intelligently adjusts position to stay visible
 
@@ -168,22 +173,22 @@ Test all three methods:
 **Test with a word that has multiple meanings (e.g., "run", "set", "play"):**
 
 #### 5A: Multiple Entries
-- [ ] 1. Search a word with multiple dictionary entries
-- [ ] 2. Navigation controls appear: **‹ 1/3 ›** (arrows and counter)
-- [ ] 3. Click the **› button** (next) → shows entry 2/3
-- [ ] 4. Click the **‹ button** (previous) → shows entry 1/3
-- [ ] 5. Counter updates correctly with each click
-- [ ] 6. Buttons are disabled when at first/last entry
+- [x] 1. Search a word with multiple dictionary entries
+- [x] 2. Navigation controls appear: **‹ 1/3 ›** (arrows and counter)
+- [x] 3. Click the **› button** (next) → shows entry 2/3
+- [x] 4. Click the **‹ button** (previous) → shows entry 1/3
+- [x] 5. Counter updates correctly with each click
+- [x] 6. Buttons are disabled when at first/last entry
 
 **Expected Result:** ✅ Can navigate between multiple dictionary entries
 
 #### 5B: Source Filtering
-- [ ] 1. Search a word with multiple sources (look for filter buttons below the word)
-- [ ] 2. You see buttons: "All Sources", "E. K. Kurup", "Crowd Sourced"
-- [ ] 3. Click **"E. K. Kurup"** → shows only entries from that source
-- [ ] 4. Counter updates (e.g., from 1/5 to 1/2)
-- [ ] 5. Active filter has a blue background
-- [ ] 6. Click **"All Sources"** → shows all entries again
+- [x] 1. Search a word with multiple sources (look for filter buttons below the word)
+- [x] 2. You see buttons: "All Sources", "E. K. Kurup", "Crowd Sourced"
+- [x] 3. Click **"E. K. Kurup"** → shows only entries from that source
+- [x] 4. Counter updates (e.g., from 1/5 to 1/2)
+- [x] 5. Active filter has a blue background
+- [x] 6. Click **"All Sources"** → shows all entries again
 
 **Expected Result:** ✅ Can filter results by source dictionary
 
@@ -192,26 +197,26 @@ Test all three methods:
 ### Part 6: Settings Configuration
 
 #### 6A: Opening Settings
-- [ ] 1. Open any search result
-- [ ] 2. Click the **⚙ (gear) icon** in the popup header
-- [ ] 3. A new tab opens with "Olam Dictionary Settings"
-- [ ] 4. Page displays all available settings
+- [x] 1. Open any search result
+- [x] 2. Click the **⚙ (gear) icon** in the popup header
+- [x] 3. A new tab opens with "Olam Dictionary Settings"
+- [x] 4. Page displays all available settings
 
 **Expected Result:** ✅ Settings page opens in a new tab
 
 #### 6B: Double-Click Toggle
-- [ ] 1. In Settings, find "Double-click opens dictionary"
-- [ ] 2. Toggle it **OFF** (switch turns gray)
-- [ ] 3. Go to any webpage and try double-clicking a word
-- [ ] 4. Nothing happens (popup doesn't open)
-- [ ] 5. Toggle it back **ON**
-- [ ] 6. Double-click a word → popup opens
+- [x] 1. In Settings, find "Double-click opens dictionary"
+- [x] 2. Toggle it **OFF** (switch turns gray)
+- [x] 3. Go to any webpage and try double-clicking a word
+- [x] 4. Nothing happens (popup doesn't open)
+- [x] 5. Toggle it back **ON**
+- [x] 6. Double-click a word → popup opens
 
 **Expected Result:** ✅ Double-click can be disabled and re-enabled
 
 #### 6C: Language Preferences
-- [ ] 1. In Settings, find "Language Preferences"
-- [ ] 2. **Search from:** dropdown shows "Auto-detect" (default)
+- [x] 1. In Settings, find "Language Preferences"
+- [x] 2. **Search from:** dropdown shows "Auto-detect" (default)
 - [ ] 3. Change it to "Malayalam"
 - [ ] 4. **Translate to:** change to "English"
 - [ ] 5. Settings save automatically (green "Settings saved!" message appears)
@@ -249,13 +254,57 @@ Test all three methods:
 #### 7B: No Results Handling
 - [ ] 1. Search a nonsense word (e.g., "xyzabc123")
 - [ ] 2. Popup shows "No results found" message
-- [ ] 3. No navigation controls appear
+- [ ] 3. Message displays "Your current language setting:"
+- [ ] 4. Shows "Source: [Language]" and "Target: [Language]"
+- [ ] 5. Shows clickable link "⚙️ Click here to change settings"
+- [ ] 6. Click the settings link
+- [ ] 7. Options page opens in new tab
+- [ ] 8. Popup closes automatically
 
-**Expected Result:** ✅ Gracefully handles words not in the dictionary
+**Expected Result:** ✅ Gracefully handles words not in dictionary with helpful language settings reminder
+
+#### 7C: Wrong Language Setting
+- [ ] 1. Open options page (⚙️ icon in popup or extension settings)
+- [ ] 2. Set "Source Language" to "Malayalam"
+- [ ] 3. Save settings
+- [ ] 4. Search an English word (e.g., "hello")
+- [ ] 5. No results message shows "Source: Malayalam"
+- [ ] 6. User can immediately see why search failed
+- [ ] 7. Click settings link to change language
+
+**Expected Result:** ✅ User understands language mismatch and can quickly fix it
 
 ---
 
-### Part 8: Page Layout Protection
+### Part 8: Zoom Support
+
+**Test Environment:**
+- Visit any website with text content
+
+#### 8A: Popup Position on Zoom
+- [ ] 1. Double-click a word to show popup
+- [ ] 2. Press Ctrl/Cmd + to zoom in (150%)
+- [ ] 3. Popup repositions automatically
+- [ ] 4. Popup stays within viewport bounds
+- [ ] 5. Press Ctrl/Cmd - to zoom out (75%)
+- [ ] 6. Popup repositions again
+- [ ] 7. Title bar remains visible
+- [ ] 8. All popup content accessible
+
+**Expected Result:** ✅ Popup adapts to zoom level changes automatically
+
+#### 8B: Zoom Before Search
+- [ ] 1. Zoom page to 200% (Ctrl/Cmd +)
+- [ ] 2. Double-click a word
+- [ ] 3. Popup appears at correct position
+- [ ] 4. Popup doesn't go off-screen
+- [ ] 5. Reset zoom to 100% (Ctrl/Cmd 0)
+
+**Expected Result:** ✅ Popup positioning accounts for page zoom level
+
+---
+
+### Part 9: Page Layout Protection
 
 **Test Environment:**
 - Visit any website with text content
@@ -272,7 +321,7 @@ Test all three methods:
 
 ---
 
-### Part 9: Performance & Reliability
+### Part 10: Performance & Reliability
 
 #### 9A: Speed Test
 - [ ] 1. Double-click a word → results appear within **1 second**
@@ -293,7 +342,7 @@ Test all three methods:
 
 ---
 
-### Part 10: Automated Test Suite (For Developers)
+### Part 11: Automated Test Suite (For Developers)
 
 **Prerequisites:**
 - Node.js installed (version 14 or higher)
@@ -351,7 +400,7 @@ Verify each test suite passes:
 
 ---
 
-### Part 11: Code Quality & Refactoring Validation
+### Part 12: Code Quality & Refactoring Validation
 
 This section validates that the recent code refactoring maintains functionality.
 
@@ -413,7 +462,7 @@ This section validates that the recent code refactoring maintains functionality.
 
 ---
 
-### Part 12: Cross-Browser Testing (Optional)
+### Part 13: Cross-Browser Testing (Optional)
 
 If you have Microsoft Edge:
 - [ ] 1. Open **Microsoft Edge** browser
@@ -438,7 +487,7 @@ If you have Microsoft Edge:
 
 **Operating System:** Windows _____ / Mac _____ / Linux _____
 
-**Extension Version:** 1.1.0
+**Extension Version:** 1.2.0
 
 ---
 
