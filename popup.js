@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Language direction:', fromLang, '→', toLang);
 
     try {
-      const apiUrl = `${API_BASE_URL}/${fromLang}/${toLang}/${encodeURIComponent(searchText)}`;
+      const apiUrl = buildApiUrl(fromLang, toLang, searchText);
       console.log('API URL:', apiUrl);
       
       const response = await fetch(apiUrl);
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const linkDiv = document.createElement('div');
     linkDiv.className = 'full-link';
     linkDiv.innerHTML = `
-      <a href="${DICTIONARY_BASE_URL}/${fromLang}/${toLang}/${encodeURIComponent(searchWord)}" target="_blank">
+      <a href="${buildDictionaryUrl(fromLang, toLang, searchWord)}" target="_blank">
         View full details on olam.in →
       </a>
     `;

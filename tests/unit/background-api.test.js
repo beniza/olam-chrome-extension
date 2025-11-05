@@ -5,6 +5,7 @@
 
 const { setupChromeMock, createMockOlamResponse } = require('../mocks/chrome-api');
 const { API_BASE_URL } = require('../../utils/constants');
+const { buildApiUrl } = require('../../utils/urlBuilder');
 
 describe('OlamAPI Service', () => {
   let OlamAPI;
@@ -16,7 +17,7 @@ describe('OlamAPI Service', () => {
     // Recreate OlamAPI module
     OlamAPI = {
       async search(text, fromLang, toLang) {
-        const url = `${API_BASE_URL}/${fromLang}/${toLang}/${encodeURIComponent(text)}`;
+        const url = buildApiUrl(fromLang, toLang, text);
         
         try {
           const response = await fetch(url);

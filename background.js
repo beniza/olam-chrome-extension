@@ -9,6 +9,7 @@
 // Import shared utilities
 importScripts('utils/detectLanguage.js');
 importScripts('utils/constants.js');
+importScripts('utils/urlBuilder.js');
 
 // =============================================================================
 // API SERVICE
@@ -26,7 +27,7 @@ const OlamAPI = {
    * @returns {Promise<Object>} API response
    */
   async search(text, fromLang, toLang) {
-    const url = `${API_BASE_URL}/${fromLang}/${toLang}/${encodeURIComponent(text)}`;
+    const url = buildApiUrl(fromLang, toLang, text);
     
     try {
       const response = await fetch(url);
