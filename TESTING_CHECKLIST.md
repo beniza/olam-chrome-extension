@@ -1,5 +1,38 @@
 # Olam Dictionary Chrome Extension - Testing Guide
 
+## 🆕 What's New in Version 1.1.0
+
+This version includes major improvements to code quality and testing:
+
+### ✅ Automated Testing
+- **100 comprehensive tests** covering all functionality
+- Jest testing framework with Chrome Extension API mocking
+- Unit tests for all components
+- Integration tests for end-to-end flows
+- Run tests with: `npm test`
+
+### 🔧 Code Refactoring
+- **Shared utility modules** in `utils/` directory:
+  - `detectLanguage.js` - Language detection (Malayalam/English)
+  - `constants.js` - Configuration constants (API URLs, defaults)
+  - `urlBuilder.js` - URL construction with proper encoding
+- Eliminated code duplication across multiple files
+- Improved maintainability and reliability
+
+### 🐛 Bug Fixes
+- Corrected language support documentation
+- Fixed broken emoji characters in README
+- Added validation to enforce Malayalam as target language
+- Improved error handling
+
+### 📋 New Testing Sections
+This checklist now includes:
+- **Part 10:** Automated test suite validation (for developers)
+- **Part 11:** Code quality and refactoring validation
+- New troubleshooting entries for utility modules
+
+---
+
 ## 📦 For First-Time Users
 
 Welcome! This guide will help you install and test the Olam Dictionary Chrome Extension. This extension allows you to look up English-Malayalam dictionary definitions by simply double-clicking words on any webpage.
@@ -260,7 +293,127 @@ Test all three methods:
 
 ---
 
-### Part 10: Cross-Browser Testing (Optional)
+### Part 10: Automated Test Suite (For Developers)
+
+**Prerequisites:**
+- Node.js installed (version 14 or higher)
+- npm (comes with Node.js)
+
+#### 10A: Initial Setup
+- [ ] 1. Open a terminal/command prompt in the extension folder
+- [ ] 2. Run `npm install` → Dependencies install successfully
+- [ ] 3. No error messages during installation
+- [ ] 4. Check that `node_modules` folder is created
+
+**Expected Result:** ✅ Dependencies install without errors
+
+#### 10B: Run Test Suite
+- [ ] 1. In terminal, run `npm test`
+- [ ] 2. Jest starts and runs all test suites
+- [ ] 3. Test results show:
+  - **Test Suites:** 7 passed, 7 total
+  - **Tests:** 100 passed, 100 total
+  - No failed or skipped tests
+- [ ] 4. All tests complete in under 5 seconds
+- [ ] 5. No red error messages appear
+
+**Expected Result:** ✅ All 100 tests pass successfully
+
+#### 10C: Individual Test Suites
+Verify each test suite passes:
+- [ ] **AppState Tests** (16 tests) - State management, configuration
+- [ ] **API Service Tests** (11 tests) - Content script API, language detection
+- [ ] **OlamAPI Tests** (17 tests) - Background API, caching, error handling
+- [ ] **Settings Service Tests** (7 tests) - Chrome storage, defaults
+- [ ] **URL Builder Tests** (19 tests) - URL construction, encoding
+- [ ] **Constants Tests** (27 tests) - Configuration values, exports
+- [ ] **Integration Tests** (3 tests) - End-to-end search flow
+
+**Expected Result:** ✅ Each test suite passes independently
+
+#### 10D: Test Watch Mode (Optional)
+- [ ] 1. Run `npm run test:watch`
+- [ ] 2. Jest starts in watch mode
+- [ ] 3. Make a small change to any `.js` file
+- [ ] 4. Tests automatically re-run
+- [ ] 5. Press `q` to quit watch mode
+
+**Expected Result:** ✅ Watch mode detects changes and re-runs tests
+
+#### 10E: Test Coverage (Optional)
+- [ ] 1. Run `npm run test:coverage`
+- [ ] 2. Coverage report is generated
+- [ ] 3. Shows coverage percentages for each file
+- [ ] 4. HTML report is created in `coverage/` folder
+- [ ] 5. Open `coverage/lcov-report/index.html` in browser
+
+**Expected Result:** ✅ Coverage report shows comprehensive test coverage
+
+---
+
+### Part 11: Code Quality & Refactoring Validation
+
+This section validates that the recent code refactoring maintains functionality.
+
+#### 11A: Language Detection Utility
+- [ ] 1. Search an **English word** (e.g., "hello")
+- [ ] 2. Check browser console (F12) - should log detected language: "english"
+- [ ] 3. Search a **Malayalam word** (e.g., "നമസ്കാരം")
+- [ ] 4. Console should log detected language: "malayalam"
+- [ ] 5. Search **mixed text** (e.g., "hello മലയാളം")
+- [ ] 6. Should detect as "malayalam" (Malayalam takes priority)
+
+**Expected Result:** ✅ Language detection works correctly for all word types
+
+#### 11B: URL Construction
+- [ ] 1. Open browser DevTools (F12) → **Network** tab
+- [ ] 2. Search a word (e.g., "book")
+- [ ] 3. Check the Network tab for API request
+- [ ] 4. Verify URL format: `https://olam.in/api/dictionary/english/malayalam/book`
+- [ ] 5. Search a word with **spaces** (e.g., "hello world")
+- [ ] 6. Verify URL encodes spaces: `hello%20world`
+- [ ] 7. Search a word with **special characters** (e.g., "test&query")
+- [ ] 8. Verify special chars are encoded: `test%26query`
+
+**Expected Result:** ✅ URLs are correctly constructed with proper encoding
+
+#### 11C: Constants Configuration
+- [ ] 1. Open browser console (F12)
+- [ ] 2. Type: `API_BASE_URL` and press Enter
+- [ ] 3. Should output: `"https://olam.in/api/dictionary"`
+- [ ] 4. Type: `DICTIONARY_BASE_URL` and press Enter
+- [ ] 5. Should output: `"https://olam.in/dictionary"`
+- [ ] 6. Type: `DEFAULT_TO_LANG` and press Enter
+- [ ] 7. Should output: `"malayalam"`
+
+**Expected Result:** ✅ Constants are globally available and correctly set
+
+#### 11D: Shared Utilities Integration
+- [ ] 1. Search multiple words in succession (at least 5)
+- [ ] 2. Use both double-click and context menu methods
+- [ ] 3. Check console for any "undefined" errors
+- [ ] 4. Verify all searches work without issues
+- [ ] 5. Open Settings → change language preferences
+- [ ] 6. Perform searches with new settings
+- [ ] 7. Everything continues working smoothly
+
+**Expected Result:** ✅ All shared utilities work seamlessly across components
+
+#### 11E: Service Worker (Background Script)
+- [ ] 1. Go to `chrome://extensions/`
+- [ ] 2. Find Olam Dictionary extension
+- [ ] 3. Click **"service worker"** link (or **"Inspect views"** → **"background page"**)
+- [ ] 4. Console window opens for background script
+- [ ] 5. Perform a search on any webpage
+- [ ] 6. Background console shows API request logs
+- [ ] 7. No errors appear (red text)
+- [ ] 8. Verify functions are defined: Type `buildApiUrl` → should show function code
+
+**Expected Result:** ✅ Background service worker runs without errors
+
+---
+
+### Part 12: Cross-Browser Testing (Optional)
 
 If you have Microsoft Edge:
 - [ ] 1. Open **Microsoft Edge** browser
@@ -309,6 +462,20 @@ If you have Microsoft Edge:
 | Page Layout Protection | ☐ Pass ☐ Fail | |
 | Performance (Speed) | ☐ Pass ☐ Fail | |
 | No Console Errors | ☐ Pass ☐ Fail | |
+| **Automated Tests (Developers)** | ☐ Pass ☐ Fail ☐ N/A | |
+| Test Suite Execution | ☐ Pass ☐ Fail ☐ N/A | |
+| All 100 Tests Pass | ☐ Pass ☐ Fail ☐ N/A | |
+| **Code Quality Validation** | ☐ Pass ☐ Fail | |
+| Language Detection | ☐ Pass ☐ Fail | |
+| URL Construction | ☐ Pass ☐ Fail | |
+| Constants Available | ☐ Pass ☐ Fail | |
+| Shared Utilities Integration | ☐ Pass ☐ Fail | |
+| Service Worker Functions | ☐ Pass ☐ Fail | |
+
+**Total Manual Tests:** _____ / 16
+**Total Developer Tests:** _____ / 8 (or mark N/A if not applicable)
+**Total Code Quality Tests:** _____ / 5
+**Overall Total:** _____ / 29 tests
 
 **Total Tests Completed:** _____ / 16
 
@@ -369,6 +536,7 @@ ________________________________________________________________
 - Re-extract the ZIP file completely
 - Make sure no files were blocked by antivirus
 - Check that `manifest.json`, `content.js`, and `background.js` exist
+- Verify `utils/` folder exists with: `detectLanguage.js`, `constants.js`, `urlBuilder.js`
 
 ### Problem: Popup doesn't appear
 **Solution:**
@@ -376,6 +544,22 @@ ________________________________________________________________
 2. Refresh the webpage (F5) after installing the extension
 3. Check browser console (F12) for errors
 4. Make sure the extension is enabled (chrome://extensions/)
+5. Verify service worker is running (click "service worker" link in chrome://extensions/)
+
+### Problem: "buildApiUrl is not defined" or similar errors
+**Solution:**
+1. Verify all utility files are loaded correctly
+2. Check `chrome://extensions/` → Click "service worker" → Look for import errors
+3. Make sure `utils/urlBuilder.js`, `utils/constants.js`, and `utils/detectLanguage.js` exist
+4. Reload the extension (click refresh icon in chrome://extensions/)
+
+### Problem: Automated tests fail
+**Solution:**
+1. Run `npm install` again to ensure all dependencies are installed
+2. Delete `node_modules` folder and `package-lock.json`, then run `npm install` again
+3. Check Node.js version: `node --version` (should be 14+)
+4. Clear Jest cache: `npm test -- --clearCache`
+5. Check for file permission issues
 
 ### Problem: Malayalam text shows as squares
 **Solution:**
