@@ -153,12 +153,37 @@ const ContextMenuService = {
       // Perform search
       const data = await OlamAPI.search(text, fromLang, toLang);
       
-      // Send results to content script
-      await chrome.tabs.sendMessage(tab.id, {
-        action: 'showPopup',
-        word: text,
-        data: data
-      });
+      // Ensure content script is injected before sending message
+      try {
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'showPopup',
+          word: text,
+          data: data
+        });
+      } catch (sendError) {
+        // Content script not loaded, inject it first
+        console.log('Content script not loaded, injecting...');
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ['utils/constants.js', 'utils/detectLanguage.js', 'utils/urlBuilder.js', 'content.js']
+        });
+        
+        // Inject CSS
+        await chrome.scripting.insertCSS({
+          target: { tabId: tab.id },
+          files: ['styles.css']
+        });
+        
+        // Wait a bit for initialization
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Try sending message again
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'showPopup',
+          word: text,
+          data: data
+        });
+      }
     } catch (error) {
       console.error('Context menu search error:', error);
     }

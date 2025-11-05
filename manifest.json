@@ -5,6 +5,7 @@
   "description": "Search selected text in Olam English-Malayalam dictionary on any webpage",
   "permissions": [
     "contextMenus",
+    "scripting",
     "storage"
   ],
   "host_permissions": [
