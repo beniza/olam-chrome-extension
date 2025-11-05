@@ -32,3 +32,9 @@ if (typeof module !== 'undefined' && module.exports) {
     buildDictionaryUrl
   };
 }
+
+// Make available globally for browser context (service worker and content scripts)
+if (typeof self !== 'undefined') {
+  self.buildApiUrl = buildApiUrl;
+  self.buildDictionaryUrl = buildDictionaryUrl;
+}
