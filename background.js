@@ -162,7 +162,7 @@ const ContextMenuService = {
         });
       } catch (sendError) {
         // Content script not loaded, inject it first
-        console.log('Content script not loaded, injecting...');
+        console.warn('Content script not loaded, injecting...');
         await chrome.scripting.executeScript({
           target: { tabId: tab.id },
           files: CONTENT_SCRIPT_FILES
